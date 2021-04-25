@@ -1,4 +1,5 @@
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
+import { Redirect } from "react-router";
 import {
   Button,
   Form,
@@ -7,6 +8,8 @@ import {
   FormBox,
   Select,
 } from "../../components/Core";
+import { UserContext } from "../../contexts/UserContext";
+const roles = ["superadmin", "admin", "seller", "bidder"];
 
 export function SignupPage(props) {
   const [firstName, setFirstName] = useState("");
@@ -16,6 +19,7 @@ export function SignupPage(props) {
   const [contact, setContact] = useState("");
   const [address, setAddress] = useState("");
   const [role, setRole] = useState();
+  const { user } = useContext(UserContext);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -39,14 +43,15 @@ export function SignupPage(props) {
       });
       if (!user.error) {
         props.history.push("/login");
+      } else {
+        throw new Error(user.error);
       }
-      throw new Error(user.error);
     } catch (error) {
       console.log(error.message);
     }
   };
 
-  return (
+  return !user ? (
     <FormBox>
       <Title center>Create your account</Title>
       <Form onSubmit={handleSubmit} method="POST">
@@ -94,5 +99,7 @@ export function SignupPage(props) {
         <Button>Signup</Button>
       </Form>
     </FormBox>
+  ) : (
+    <Redirect to={`/${roles[user.role]}/${user._id}`} />
   );
 }
