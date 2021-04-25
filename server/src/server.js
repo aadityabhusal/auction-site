@@ -6,12 +6,12 @@ const app = express();
 const port = 8000;
 const routes = require("./routes");
 
-/* mongoose.Promise = global.Promise;
+mongoose.Promise = global.Promise;
 mongoose.connect("mongodb://localhost/AuctionSite", {
   useNewUrlParser: true,
   useUnifiedTopology: true,
 });
- */
+
 app.use(cookieParser());
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());

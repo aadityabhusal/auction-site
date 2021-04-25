@@ -1,6 +1,6 @@
 const mongoose = require("mongoose");
 
-const BidderSchema = new mongoose.Schema({
+const UserSchema = new mongoose.Schema({
   firstName: {
     type: String,
     required: "Enter your first name",
@@ -25,14 +25,18 @@ const BidderSchema = new mongoose.Schema({
     type: String,
     required: "Enter your address",
   },
-  createdDate: {
-    type: Date,
-    default: Date.now,
+  role: {
+    type: Number,
+    required: "Enter your user role",
   },
   status: {
     type: Number,
     default: 0,
   },
+  createdDate: {
+    type: Date,
+    default: Date.now,
+  },
 });
 
-module.exports = mongoose.model("Bidder", BidderSchema);
+module.exports = mongoose.model("User", UserSchema);

@@ -1,5 +1,12 @@
 import React, { useState } from "react";
-import { Button, Form, Input, Title, FormBox } from "../../components/Core";
+import {
+  Button,
+  Form,
+  Input,
+  Title,
+  FormBox,
+  Select,
+} from "../../components/Core";
 
 export function SignupPage(props) {
   const [firstName, setFirstName] = useState("");
@@ -8,6 +15,7 @@ export function SignupPage(props) {
   const [password, setPassword] = useState("");
   const [contact, setContact] = useState("");
   const [address, setAddress] = useState("");
+  const [role, setRole] = useState();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -18,13 +26,29 @@ export function SignupPage(props) {
       password,
       contact,
       address,
+      role,
     };
-    console.log(data);
+    try {
+      let user = await fetch(`/user/signup`, {
+        method: "post",
+        headers: {
+          Accept: "application/json",
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(data),
+      });
+      if (!user.error) {
+        props.history.push("/login");
+      }
+      throw new Error(user.error);
+    } catch (error) {
+      console.log(error.message);
+    }
   };
 
   return (
     <FormBox>
-      <Title center>Signup</Title>
+      <Title center>Create your account</Title>
       <Form onSubmit={handleSubmit} method="POST">
         <Input
           type="text"
@@ -62,6 +86,11 @@ export function SignupPage(props) {
           value={address}
           onChange={(e) => setAddress(e.target.value)}
         ></Input>
+        <Select onChange={(e) => setRole(e.target.value)}>
+          <option value="">Select your account type</option>
+          <option value="2">Seller</option>
+          <option value="3">Bidder</option>
+        </Select>
         <Button>Signup</Button>
       </Form>
     </FormBox>

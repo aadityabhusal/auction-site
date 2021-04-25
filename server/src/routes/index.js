@@ -1,9 +1,7 @@
 const express = require("express");
 
-const adminRoutes = require("./adminRoutes");
+const userRoutes = require("./userRoutes");
 const aunctionRoutes = require("./auctionRoutes");
-const bidderRoutes = require("./bidderRoutes");
-const sellerRoutes = require("./sellerRoutes");
 
 const router = express.Router();
 
@@ -16,10 +14,8 @@ const routes = () => {
     }
   });
 
-  router.use("/admin", adminRoutes());
+  router.use("/user", userRoutes());
   router.use("/auction", aunctionRoutes());
-  router.use("/bidder", bidderRoutes());
-  router.use("/seller", sellerRoutes());
 
   return router;
 };
