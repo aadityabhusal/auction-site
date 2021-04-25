@@ -42,3 +42,8 @@ export const AuctionInfo = styled.div`
 export const AuctionInfoItem = styled.div`
   margin-bottom: 10px;
 `;
+
+export const SearchBox = styled.div`
+  display: flex;
+  flex: 1;
+`;

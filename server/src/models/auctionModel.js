@@ -9,9 +9,21 @@ const AuctionSchema = new mongoose.Schema({
     type: String,
     required: "Enter the product category",
   },
+  bidAmount: {
+    type: Number,
+    required: "Enter the bid amount",
+  },
   image: {
     type: Buffer,
     required: "Enter the product image",
+  },
+  conatct: {
+    type: String,
+    required: "Enter your contact number",
+  },
+  address: {
+    type: String,
+    required: "Enter your address",
   },
   createdDate: {
     type: Date,

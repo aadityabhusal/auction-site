@@ -1,8 +1,14 @@
 import styled from "styled-components";
 
-export const Container = styled.div``;
+export const Container = styled.div`
+  display: flex;
+  justify-content: center;
+  max-width: 980px;
+  padding: 20px;
+  margin: 0 auto;
+`;
 
-export const Header = styled.div`
+export const HeaderContainer = styled.div`
   padding: 10px 20px;
   display: flex;
   justify-content: space-between;
@@ -20,12 +26,32 @@ export const Header = styled.div`
   }
 
   & .is-active {
-    color: #000;
+    color: #f39c12;
   }
 `;
 
-export const Button = styled.button`
+export const Title = styled.h1`
+  margin: 0;
+  margin-bottom: 20px;
+  text-align: ${(props) => (props.center ? "center" : "left")};
+`;
+
+export const FormBox = styled.div`
+  margin-top: 30px;
+  flex: 0 0 400px;
+  border-radius: 5px;
+  padding: 20px;
+  box-shadow: 0 5px 20px 0 #444;
+`;
+
+export const Form = styled.form`
+  margin: 0;
   flex: 1;
+  display: flex;
+  flex-direction: column;
+`;
+
+export const Button = styled.button`
   padding: 10px;
   border: none;
   border-radius: 3px;
@@ -39,21 +65,11 @@ export const Button = styled.button`
 export const Input = styled.input`
   flex: 1;
   padding: 10px;
-  border: 1px solid #444;
+  border: 1px solid #666;
   border-radius: 3px;
   margin-bottom: 10px;
   outline: 0;
+  font-size: 15px;
 `;
 
-export const Title = styled.h1`
-  margin: 0;
-  margin-bottom: 20px;
-  text-align: ${(props) => (props.center ? "center" : "left")};
-`;
-
-export const Form = styled.form`
-  margin: 0;
-  flex: 1;
-  display: flex;
-  flex-direction: column;
-`;
+export const Select = styled(Input).attrs({ as: "select" })``;

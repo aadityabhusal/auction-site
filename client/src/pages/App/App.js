@@ -1,7 +1,8 @@
 import React from "react";
-import { BrowserRouter, NavLink, Route, Switch } from "react-router-dom";
+import { BrowserRouter, Route, Switch } from "react-router-dom";
 import "./App.css";
 
+import { Header } from "./Header";
 import { HomePage } from "../Home/HomePage";
 import { LoginPage } from "../Auth/LoginPage";
 import { SignupPage } from "../Auth/SignupPage";
@@ -14,28 +15,13 @@ import { CreateAuctionPage } from "../Auction/CreateAuctionPage";
 import { EditAuctionPage } from "../Auction/EditAuctionPage";
 import { SearchAuctionPage } from "../Auction/SearchAuction";
 import { ErrorPage } from "./ErrorPage";
-import { Container, Header } from "../../components/Core";
+import { Container } from "../../components/Core";
 
 function App() {
   return (
     <BrowserRouter>
+      <Header />
       <Container>
-        <Header>
-          <div>
-            <NavLink to="/">AuctionSite</NavLink>
-          </div>
-          <nav>
-            <NavLink activeClassName="is-active" to="/search">
-              Search
-            </NavLink>
-            <NavLink activeClassName="is-active" to="/login">
-              Login
-            </NavLink>
-            <NavLink activeClassName="is-active" to="/signup">
-              Signup
-            </NavLink>
-          </nav>
-        </Header>
         <Switch>
           <Route exact path="/" component={HomePage} />
           <Route exact path="/login" component={LoginPage} />
