@@ -1,8 +1,8 @@
+require("dotenv").config({ path: __dirname + "/../.env" });
 const User = require("../models/userModel");
 const sha256 = require("crypto-js/sha256");
 const Hex = require("crypto-js/enc-hex");
 const jwt = require("jsonwebtoken");
-require("dotenv").config({ path: __dirname + "/../.env" });
 
 const createUser = async (req, res, next) => {
   try {

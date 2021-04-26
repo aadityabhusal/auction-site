@@ -17,10 +17,14 @@ export const UserHeadSection = styled.div`
 
 export const UserHeadInfo = styled.div`
   flex: 1;
-  display: flex;
-  flex-direction: column;
   margin-left: 30px;
   & a {
     align-self: flex-end;
+    margin: 0 10px;
   }
+`;
+
+export const UserHeadButtons = styled.div`
+  display: flex;
+  justify-content: flex-end;
 `;

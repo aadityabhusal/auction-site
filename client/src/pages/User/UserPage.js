@@ -1,7 +1,11 @@
 import React, { useContext, useEffect, useState } from "react";
 import { useParams } from "react-router";
 import { ButtonLink, Title, Title2 } from "../../components/Core";
-import { UserHeadSection, UserHeadInfo } from "../../components/User";
+import {
+  UserHeadSection,
+  UserHeadInfo,
+  UserHeadButtons,
+} from "../../components/User";
 import { UserContext } from "../../contexts/UserContext";
 
 export function UserPage() {
@@ -36,9 +40,12 @@ export function UserPage() {
         {authUser?._id === user._id && (
           <>
             <Title2>{authUser.email}</Title2>
-            <ButtonLink to={`/user/${authUser._id}/edit`}>
-              Edit Profile
-            </ButtonLink>
+            <UserHeadButtons>
+              <ButtonLink to={`/item`}>Sell an Item</ButtonLink>
+              <ButtonLink to={`/user/${authUser._id}/edit`}>
+                Edit Profile
+              </ButtonLink>
+            </UserHeadButtons>
           </>
         )}
       </UserHeadInfo>

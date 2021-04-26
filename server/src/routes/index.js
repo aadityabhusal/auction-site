@@ -1,7 +1,7 @@
 const express = require("express");
 
 const userRoutes = require("./userRoutes");
-const aunctionRoutes = require("./auctionRoutes");
+const itemRoutes = require("./itemRoutes");
 
 const router = express.Router();
 
@@ -15,7 +15,7 @@ const routes = () => {
   });
 
   router.use("/user", userRoutes());
-  router.use("/auction", aunctionRoutes());
+  router.use("/item", itemRoutes());
 
   return router;
 };

@@ -31,13 +31,17 @@ function App() {
             <Route exact path="/login" component={LoginPage} />
             <Route exact path="/signup" component={SignupPage} />
             <Route exact path="/search" component={SearchItemPage} />
-            <Route exact path="/item" component={CreateItemPage} />
+            <Protected exact path="/item" component={CreateItemPage} />
             <Route exact path="/item/:itemId" component={ItemPage} />
-            <Route exact path="/item/:itemId/edit" component={EditItemPage} />
+            <Protected
+              exact
+              path="/item/:itemId/edit"
+              component={EditItemPage}
+            />
             <Route exact path="/user/:userId" component={UserPage} />
             <Protected path="/user/:userId/edit" component={EditUserPage} />
-            <Route exact path="/admin/:adminId" component={AdminPage} />
-            <Route
+            <Protected exact path="/admin/:adminId" component={AdminPage} />
+            <Protected
               exact
               path="/admin/:adminId/edit"
               component={EditAdminPage}

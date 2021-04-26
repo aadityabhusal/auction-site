@@ -1,12 +1,12 @@
 const mongoose = require("mongoose");
 
-const AuctionSchema = new mongoose.Schema({
+const ItemSchema = new mongoose.Schema({
   title: {
     type: String,
     required: "Enter the item title",
   },
   category: {
-    type: String,
+    type: Number,
     required: "Enter the item category",
   },
   bidAmount: {
@@ -14,14 +14,32 @@ const AuctionSchema = new mongoose.Schema({
     required: "Enter the bid amount",
   },
   description: {
-    type: Number,
+    type: String,
     required: "Enter the item description",
   },
+  seller: {
+    _id: {
+      type: mongoose.Schema.Types.ObjectId,
+      required: "Enter seller id",
+    },
+    firstName: {
+      type: String,
+      required: "Enter seller first name",
+    },
+    lastName: {
+      type: String,
+      required: "Enter seller last name",
+    },
+  },
+  winner: {
+    type: Object,
+    default: {},
+  },
   image: {
-    type: Buffer,
+    type: String,
     required: "Enter the item image",
   },
-  conatct: {
+  contact: {
     type: String,
     required: "Enter your contact number",
   },
@@ -43,4 +61,4 @@ const AuctionSchema = new mongoose.Schema({
   },
 });
 
-module.exports = mongoose.model("Auction", AuctionSchema);
+module.exports = mongoose.model("Item", ItemSchema);

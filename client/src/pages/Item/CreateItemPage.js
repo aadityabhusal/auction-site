@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import {
   Button,
   Form,
@@ -8,6 +8,7 @@ import {
   Select,
   TextArea,
 } from "../../components/Core";
+import { UserContext } from "../../contexts/UserContext";
 
 const categories = [
   "Painting",
@@ -17,7 +18,7 @@ const categories = [
   "Carving",
 ];
 
-export function CreateItemPage() {
+export function CreateItemPage({ history }) {
   const [title, setTitle] = useState("");
   const [category, setCategory] = useState("");
   const [bidAmount, setBidAmount] = useState("");
@@ -27,27 +28,48 @@ export function CreateItemPage() {
   const [address, setAddress] = useState("");
   const [auctionDate, setAuctionDate] = useState("");
 
+  const { user } = useContext(UserContext);
+
   const handleSubmit = async (e) => {
-    let seller = "1";
-    e.preventDefault();
-    let data = {
-      title,
-      category,
-      bidAmount,
-      description,
-      image,
-      contact,
-      address,
-      auctionDate,
-      seller,
+    let seller = {
+      _id: user._id,
+      firstName: user.firstName,
+      lastName: user.lastName,
     };
-    console.log(data);
+
+    e.preventDefault();
+    const formData = new FormData();
+    formData.append("title", title);
+    formData.append("category", category);
+    formData.append("bidAmount", bidAmount);
+    formData.append("description", description);
+    formData.append("seller", JSON.stringify(seller));
+    formData.append("image", image);
+    formData.append("contact", contact);
+    formData.append("address", address);
+    formData.append("auctionDate", auctionDate);
+
+    try {
+      let response = await (
+        await fetch(`/item`, {
+          method: "post",
+          body: formData,
+        })
+      ).json();
+      if (!response.error) {
+        history.push(`/user/${user._id}`);
+      } else {
+        throw new Error(response.error);
+      }
+    } catch (error) {
+      console.log(error.message);
+    }
   };
 
   return (
     <FormBox>
       <Title center>Create a Product</Title>
-      <Form onSubmit={handleSubmit} method="POST">
+      <Form onSubmit={handleSubmit} method="POST" enctype="multipart/form-data">
         <Input
           type="text"
           placeholder="Enter the Product Title"
@@ -57,8 +79,10 @@ export function CreateItemPage() {
         ></Input>
         <Select onChange={(e) => setCategory(e.target.value)}>
           <option value="">Select a category</option>
-          {categories.map((item) => (
-            <option key={item}>{item}</option>
+          {categories.map((item, i) => (
+            <option key={i} value={i + 1}>
+              {item}
+            </option>
           ))}
         </Select>
         <Input
@@ -90,8 +114,7 @@ export function CreateItemPage() {
         ></Input>
         <Input
           type="file"
-          value={image}
-          onChange={(e) => setImage(e.target.value)}
+          onChange={(e) => setImage(e.target.files[0])}
           required
         ></Input>
         <TextArea
