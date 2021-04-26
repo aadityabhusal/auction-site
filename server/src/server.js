@@ -1,4 +1,5 @@
 const express = require("express");
+const path = require("path");
 const mongoose = require("mongoose");
 const cookieParser = require("cookie-parser");
 
@@ -15,6 +16,7 @@ mongoose.connect("mongodb://localhost/AuctionSite", {
 app.use(cookieParser());
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
+app.use("/uploads", express.static(path.join(__dirname, "../uploads")));
 app.use("/", routes());
 
 app.use((err, req, res, next) => {

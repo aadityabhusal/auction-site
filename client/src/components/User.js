@@ -1,5 +1,11 @@
 import styled from "styled-components";
 
+export const UserContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+`;
+
 export const UserHeadSection = styled.div`
   flex: 1;
   padding: 20px;

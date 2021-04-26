@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { SearchBox } from "../../components/Auction";
+import { SearchBox } from "../../components/Item";
 import { Input } from "../../components/Core";
 
 export function SearchItemPage() {

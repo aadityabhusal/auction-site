@@ -66,6 +66,7 @@ const getUser = async (req, res, next) => {
     let data = await User.findById(req.params.userId, {
       firstName: 1,
       lastName: 1,
+      items: 1,
     });
     res.send(data);
   } catch (error) {

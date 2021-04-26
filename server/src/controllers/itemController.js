@@ -9,7 +9,15 @@ const createItem = async (req, res, next) => {
     let item = await newItem.save();
     await User.findOneAndUpdate(
       { _id: req.body.seller._id },
-      { $push: { items: { itemId: item._id, itemTitle: item.title } } },
+      {
+        $push: {
+          items: {
+            itemId: item._id,
+            itemTitle: item.title,
+            itemImage: item.image,
+          },
+        },
+      },
       {
         new: true,
         useFindAndModify: false,
