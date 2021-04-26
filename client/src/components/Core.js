@@ -1,3 +1,4 @@
+import { Link } from "react-router-dom";
 import styled from "styled-components";
 
 export const Container = styled.div`
@@ -9,13 +10,15 @@ export const Container = styled.div`
 `;
 
 export const HeaderContainer = styled.div`
-  padding: 10px 20px;
+  padding: 0px 20px;
   display: flex;
   justify-content: space-between;
   background-color: #3f51b5;
   color: #fff;
 
   & a {
+    display: inline-block;
+    padding: 15px 0;
     text-decoration: none;
     margin-left: 20px;
     color: #ecf0f1;
@@ -34,6 +37,10 @@ export const Title = styled.h1`
   margin: 0;
   margin-bottom: 20px;
   text-align: ${(props) => (props.center ? "center" : "left")};
+`;
+
+export const Title2 = styled(Title).attrs({ as: "h2" })`
+  margin-bottom: 10px;
 `;
 
 export const FormBox = styled.div`
@@ -62,6 +69,10 @@ export const Button = styled.button`
   outline: 0;
 `;
 
+export const ButtonLink = styled(Button).attrs({ as: Link })`
+  text-decoration: none;
+`;
+
 export const Input = styled.input`
   flex: 1;
   padding: 10px;
@@ -73,3 +84,14 @@ export const Input = styled.input`
 `;
 
 export const Select = styled(Input).attrs({ as: "select" })``;
+export const TextArea = styled(Input).attrs({ as: "textarea" })``;
+
+export const Message = styled.div`
+  padding: 10px;
+  border: none;
+  background-color: #27ae60;
+  box-shadow: 0 2px 5px 0 #444;
+  margin-bottom: 20px;
+  color: #fff;
+  text-align: center;
+`;

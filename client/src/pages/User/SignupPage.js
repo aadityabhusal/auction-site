@@ -9,7 +9,6 @@ import {
   Select,
 } from "../../components/Core";
 import { UserContext } from "../../contexts/UserContext";
-const roles = ["superadmin", "admin", "seller", "bidder"];
 
 export function SignupPage(props) {
   const [firstName, setFirstName] = useState("");
@@ -100,6 +99,6 @@ export function SignupPage(props) {
       </Form>
     </FormBox>
   ) : (
-    <Redirect to={`/${roles[user.role]}/${user._id}`} />
+    <Redirect to={`/user/${user._id}`} />
   );
 }

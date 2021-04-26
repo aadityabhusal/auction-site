@@ -3,12 +3,10 @@ import { Redirect } from "react-router";
 import { Button, Input, Title, FormBox, Form } from "../../components/Core";
 import { UserContext } from "../../contexts/UserContext";
 
-const roles = ["superadmin", "admin", "seller", "bidder"];
-
 export function LoginPage(props) {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const { user, setLoggedIn } = useContext(UserContext);
+  const { user, setToken } = useContext(UserContext);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -18,7 +16,7 @@ export function LoginPage(props) {
     };
 
     try {
-      let user = await (
+      let response = await (
         await fetch(`/user/login`, {
           method: "post",
           headers: {
@@ -29,12 +27,13 @@ export function LoginPage(props) {
           body: JSON.stringify(data),
         })
       ).json();
-      console.log(user);
-      if (!user.error) {
-        setLoggedIn(true);
-        props.history.push(`/${roles[user.role]}/` + user.uid);
+
+      if (!response.error) {
+        localStorage.setItem("auctionSiteToken", response.auctionSiteToken);
+        setToken(response.auctionSiteToken);
+        props.history.push(`/user/` + response.uid);
       } else {
-        throw new Error(user.error);
+        throw new Error(response.error);
       }
     } catch (error) {
       console.log(error.message);
@@ -61,6 +60,6 @@ export function LoginPage(props) {
       </Form>
     </FormBox>
   ) : (
-    <Redirect to={`/${roles[user.role]}/${user._id}`} />
+    <Redirect to={`/user/${user._id}`} />
   );
 }

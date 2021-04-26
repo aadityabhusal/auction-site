@@ -10,7 +10,6 @@ const createUser = async (req, res, next) => {
     let newUser = new User(req.body);
     let user = await newUser.save();
     let { password, ...data } = await user.toJSON();
-    console.log(data);
     res.status(201).json(data);
   } catch (error) {
     error.status = 500;
@@ -30,35 +29,26 @@ const loginUser = async (req, res, next) => {
     if (user.password !== Hex.stringify(passwordHash)) {
       throw new Error("Incorrect Password");
     }
-
     const token = jwt.sign(
       { _id: user._id, role: user.role },
       process.env.ACCESS_TOKEN_SECRET
     );
-    res.cookie("jwt", token, {
-      httpOnly: true,
-      maxAge: 3 * 24 * 60 * 60 * 1000,
-    });
-    res.send({ uid: user._id, role: user.role });
+    res.send({ uid: user._id, auctionSiteToken: token });
   } catch (error) {
     error.status = 400;
     return next(error);
   }
 };
 
-const logoutUser = (req, res, next) => {
-  res.cookie("jwt", "", {
-    maxAge: 0,
-  });
-  res.send({ message: "Logout Success" });
-};
-
 const authenticateUser = async (req, res, next) => {
   try {
-    const cookie = req.cookies["jwt"];
-    if (!cookie) throw new Error("Unauthenticated User");
+    const auctionSiteToken = req.body.auctionSiteToken;
+    if (!auctionSiteToken) throw new Error("Unauthenticated User");
 
-    const verify = jwt.verify(cookie, process.env.ACCESS_TOKEN_SECRET);
+    const verify = jwt.verify(
+      auctionSiteToken,
+      process.env.ACCESS_TOKEN_SECRET
+    );
     if (!verify) throw new Error("Unauthenticated User");
 
     let { password, ...data } = await (
@@ -73,7 +63,11 @@ const authenticateUser = async (req, res, next) => {
 
 const getUser = async (req, res, next) => {
   try {
-    res.send("Get User");
+    let data = await User.findById(req.params.userId, {
+      firstName: 1,
+      lastName: 1,
+    });
+    res.send(data);
   } catch (error) {
     error.status = 500;
     return next(error);
@@ -82,9 +76,15 @@ const getUser = async (req, res, next) => {
 
 const updateUser = async (req, res, next) => {
   try {
-    res.send("Update User");
+    let { password, ...data } = await (
+      await User.findOneAndUpdate({ _id: req.params.userId }, req.body, {
+        new: true,
+        useFindAndModify: false,
+      })
+    ).toJSON();
+    res.send(data);
   } catch (error) {
-    error.status = 500;
+    error.status = 400;
     return next(error);
   }
 };
@@ -104,6 +104,5 @@ module.exports = {
   updateUser,
   deleteUser,
   loginUser,
-  logoutUser,
   authenticateUser,
 };

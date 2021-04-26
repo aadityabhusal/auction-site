@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { SearchBox } from "../../components/Auction";
 import { Input } from "../../components/Core";
 
-export function SearchAuctionPage() {
+export function SearchItemPage() {
   const [search, setSearch] = useState("");
 
   const handleSearch = (e) => {
@@ -15,7 +15,7 @@ export function SearchAuctionPage() {
     <SearchBox>
       <Input
         type="text"
-        placeholder="Type auction name and press enter"
+        placeholder="Type item name and press enter"
         value={search}
         onChange={(e) => setSearch(e.target.value)}
         onKeyUp={handleSearch}

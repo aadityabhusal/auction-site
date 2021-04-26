@@ -27,7 +27,15 @@ const UserSchema = new mongoose.Schema({
   },
   role: {
     type: Number,
-    required: "Enter your user role",
+    default: 2,
+  },
+  items: {
+    type: Array,
+    default: [],
+  },
+  won: {
+    type: Array,
+    default: [],
   },
   status: {
     type: Number,

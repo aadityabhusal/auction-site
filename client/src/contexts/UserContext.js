@@ -4,29 +4,39 @@ export const UserContext = createContext();
 
 export const UserProvider = (props) => {
   const [user, setUser] = useState(null);
-  const [loggedIn, setLoggedIn] = useState(false);
-
+  const [token, setToken] = useState(localStorage.getItem("auctionSiteToken"));
   useEffect(() => {
     (async () => {
       try {
         let response = await fetch(`/user/auth`, {
+          method: "post",
           headers: {
             "Content-Type": "application/json",
           },
           credentials: "include",
+          body: JSON.stringify({
+            auctionSiteToken: token,
+          }),
         });
         let user = await response.json();
         if (!user.error) {
           setUser(user);
-          setLoggedIn(true);
         }
       } catch (error) {
         console.log(error);
       }
     })();
-  }, [loggedIn]);
+  }, [token]);
+
+  function isAuthenticated() {
+    if (token) {
+      return true;
+    }
+    return false;
+  }
+
   return (
-    <UserContext.Provider value={{ user, setUser, loggedIn, setLoggedIn }}>
+    <UserContext.Provider value={{ user, setUser, setToken, isAuthenticated }}>
       {props.children}
     </UserContext.Provider>
   );

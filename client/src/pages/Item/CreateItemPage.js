@@ -6,6 +6,7 @@ import {
   Title,
   FormBox,
   Select,
+  TextArea,
 } from "../../components/Core";
 
 const categories = [
@@ -16,14 +17,15 @@ const categories = [
   "Carving",
 ];
 
-export function CreateAuctionPage() {
+export function CreateItemPage() {
   const [title, setTitle] = useState("");
   const [category, setCategory] = useState("");
   const [bidAmount, setBidAmount] = useState("");
+  const [description, setDescription] = useState("");
   const [image, setImage] = useState("");
   const [contact, setContact] = useState("");
   const [address, setAddress] = useState("");
-  const [expiryDate, setExpiryDate] = useState("");
+  const [auctionDate, setAuctionDate] = useState("");
 
   const handleSubmit = async (e) => {
     let seller = "1";
@@ -32,10 +34,11 @@ export function CreateAuctionPage() {
       title,
       category,
       bidAmount,
+      description,
       image,
       contact,
       address,
-      expiryDate,
+      auctionDate,
       seller,
     };
     console.log(data);
@@ -50,6 +53,7 @@ export function CreateAuctionPage() {
           placeholder="Enter the Product Title"
           value={title}
           onChange={(e) => setTitle(e.target.value)}
+          required
         ></Input>
         <Select onChange={(e) => setCategory(e.target.value)}>
           <option value="">Select a category</option>
@@ -62,29 +66,41 @@ export function CreateAuctionPage() {
           placeholder="Enter the Bid Amount"
           value={bidAmount}
           onChange={(e) => setBidAmount(e.target.value)}
+          required
         ></Input>
         <Input
           type="number"
           placeholder="Enter your Contact Number"
           value={contact}
           onChange={(e) => setContact(e.target.value)}
+          required
         ></Input>
         <Input
           type="text"
           placeholder="Enter the Address"
           value={address}
           onChange={(e) => setAddress(e.target.value)}
+          required
         ></Input>
         <Input
           type="datetime-local"
-          value={expiryDate}
-          onChange={(e) => setExpiryDate(e.target.value)}
+          value={auctionDate}
+          onChange={(e) => setAuctionDate(e.target.value)}
+          required
         ></Input>
         <Input
           type="file"
           value={image}
           onChange={(e) => setImage(e.target.value)}
+          required
         ></Input>
+        <TextArea
+          placeholder="Enter the Description"
+          rows={5}
+          value={description}
+          onChange={(e) => setDescription(e.target.value)}
+          required
+        ></TextArea>
         <Button>Create a Product</Button>
       </Form>
     </FormBox>
