@@ -32,7 +32,8 @@ const createItem = async (req, res, next) => {
 
 const getItem = async (req, res, next) => {
   try {
-    res.send("Get Item");
+    let site = await Item.findById(req.params.itemId);
+    res.send(site);
   } catch (error) {
     error.status = 500;
     return next(error);
@@ -41,16 +42,26 @@ const getItem = async (req, res, next) => {
 
 const updateItem = async (req, res, next) => {
   try {
-    res.send("Update Item");
+    if (req.file) {
+      req.body.image = req.file.filename;
+      /* Delete the older image file */
+    }
+    req.body.seller = JSON.parse(req.body.seller);
+    await Item.findOneAndUpdate({ _id: req.params.itemId }, req.body, {
+      new: true,
+      useFindAndModify: false,
+    });
+    res.send({ message: "Item Updated" });
   } catch (error) {
-    error.status = 500;
+    error.status = 400;
     return next(error);
   }
 };
 
 const deleteItem = async (req, res, next) => {
   try {
-    res.send("Delete Item");
+    await Item.deleteOne({ _id: req.params.itemId });
+    res.send({ message: "Item Deleted" });
   } catch (error) {
     error.status = 500;
     return next(error);

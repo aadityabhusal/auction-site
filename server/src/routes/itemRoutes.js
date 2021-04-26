@@ -30,7 +30,11 @@ const upload = multer({ storage: imageStorage });
 
 const routes = () => {
   router.post("/", upload.single("image"), createItem);
-  router.route("/:itemId").get(getItem).put(updateItem).delete(deleteItem);
+  router
+    .route("/:itemId")
+    .get(getItem)
+    .put(upload.single("image"), updateItem)
+    .delete(deleteItem);
 
   return router;
 };

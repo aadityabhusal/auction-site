@@ -6,9 +6,13 @@ import {
   ItemCardTitle,
   ItemList,
 } from "../../components/Item";
-import { ButtonLink, Title, Title2 } from "../../components/Core";
 import {
-  UserContainer,
+  ButtonLink,
+  PageContainer,
+  Title,
+  Title2,
+} from "../../components/Core";
+import {
   UserHeadSection,
   UserHeadInfo,
   UserHeadButtons,
@@ -33,7 +37,6 @@ export function UserPage() {
         credentials: "include",
       });
       let data = await response.json();
-      console.log(data);
       setUser(data);
     } catch (error) {
       console.log(error);
@@ -41,7 +44,7 @@ export function UserPage() {
   };
 
   return user ? (
-    <UserContainer>
+    <PageContainer>
       <UserHeadSection>
         <img src="/user.png" alt="user" />
         <UserHeadInfo>
@@ -71,7 +74,7 @@ export function UserPage() {
           </ItemCard>
         ))}
       </ItemList>
-    </UserContainer>
+    </PageContainer>
   ) : (
     <div style={{ textAlign: "center", marginTop: "20px" }}>Loading...</div>
   );

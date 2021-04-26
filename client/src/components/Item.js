@@ -34,8 +34,13 @@ export const ItemCardTitle = styled(Link)`
   }
 `;
 
+export const ItemContainer = styled.div`
+  display: flex;
+  flex: 1;
+`;
+
 export const ItemImages = styled.div`
-  flex: 0 0 25%;
+  flex: 0 0 40%;
   & img {
     width: 100%;
   }
@@ -46,8 +51,17 @@ export const ItemInfo = styled.div`
 `;
 
 export const ItemInfoItem = styled.div`
-  margin-bottom: 10px;
+  margin-bottom: 15px;
+  display: flex;
+  line-height: 1.5;
 `;
+
+export const ItemInfoTitle = styled.div`
+  font-weight: bold;
+  margin-right: 15px;
+`;
+
+export const ItemInfoValue = styled.div``;
 
 export const SearchBox = styled.div`
   display: flex;

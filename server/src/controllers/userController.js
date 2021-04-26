@@ -92,7 +92,8 @@ const updateUser = async (req, res, next) => {
 
 const deleteUser = async (req, res, next) => {
   try {
-    res.send("Delete User");
+    await User.deleteOne({ _id: req.params.userId });
+    res.sendStatus(200);
   } catch (error) {
     error.status = 500;
     return next(error);

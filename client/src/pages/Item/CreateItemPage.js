@@ -68,7 +68,7 @@ export function CreateItemPage({ history }) {
 
   return (
     <FormBox>
-      <Title center>Create a Product</Title>
+      <Title center>Create a new Item</Title>
       <Form onSubmit={handleSubmit} method="POST" enctype="multipart/form-data">
         <Input
           type="text"

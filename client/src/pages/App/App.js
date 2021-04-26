@@ -13,7 +13,7 @@ import { CreateItemPage } from "../Item/CreateItemPage";
 import { EditItemPage } from "../Item/EditItemPage";
 import { SearchItemPage } from "../Item/SearchItemPage";
 import { ErrorPage } from "./ErrorPage";
-import { Container } from "../../components/Core";
+import { GlobalContainer } from "../../components/Core";
 import { AdminPage } from "../Admin/AdminPage";
 import { EditAdminPage } from "../Admin/EditAdminPage";
 
@@ -25,7 +25,7 @@ function App() {
     <BrowserRouter>
       <UserProvider>
         <Header />
-        <Container>
+        <GlobalContainer>
           <Switch>
             <Route exact path="/" component={HomePage} />
             <Route exact path="/login" component={LoginPage} />
@@ -48,7 +48,7 @@ function App() {
             />
             <Route component={ErrorPage} />
           </Switch>
-        </Container>
+        </GlobalContainer>
       </UserProvider>
     </BrowserRouter>
   );

@@ -1,12 +1,18 @@
 import { Link } from "react-router-dom";
 import styled from "styled-components";
 
-export const Container = styled.div`
+export const GlobalContainer = styled.div`
   display: flex;
   justify-content: center;
   max-width: 980px;
   padding: 20px;
   margin: 0 auto;
+`;
+
+export const PageContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+  flex: 1;
 `;
 
 export const HeaderContainer = styled.div`
