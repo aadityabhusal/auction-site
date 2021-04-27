@@ -8,6 +8,7 @@ const {
   authenticateAdmin,
   getUsers,
   getItems,
+  getAdmins,
 } = require("../controllers/adminController");
 
 const router = express.Router();
@@ -18,6 +19,7 @@ const routes = () => {
   router.post("/auth", authenticateAdmin);
   router.get("/users", getUsers);
   router.get("/items", getItems);
+  router.get("/admins", getAdmins);
 
   router.route("/:adminId").get(getAdmin).put(updateAdmin).delete(deleteAdmin);
 

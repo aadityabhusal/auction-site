@@ -48,7 +48,11 @@ export function Header() {
             <NavLink activeClassName="is-active" to={`/admin/${admin._id}`}>
               {`${admin.firstName} ${admin.lastName}`}
             </NavLink>
-            <NavLink activeClassName="is-active" to="/login" onClick={logout}>
+            <NavLink
+              activeClassName="is-active"
+              to="/admin/login"
+              onClick={logout}
+            >
               Logout
             </NavLink>
           </>

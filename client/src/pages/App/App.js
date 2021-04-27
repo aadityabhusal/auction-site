@@ -22,7 +22,6 @@ import { Protected } from "../Auth/Protected";
 import { AdminRoutes } from "../Auth/AdminRoutes";
 import { CreateAdminPage } from "../Admin/CreateAdminPage";
 import { AdminLoginPage } from "../Admin/AdminLoginPage";
-import { AdminSignupPage } from "../Admin/AdminSignupPage";
 import { AdminProvider } from "../../contexts/AdminContext";
 
 function App() {
@@ -47,9 +46,12 @@ function App() {
               <Route exact path="/user/:userId" component={UserPage} />
               <Protected path="/user/:userId/edit" component={EditUserPage} />
 
-              <AdminRoutes exact path="/admin" component={CreateAdminPage} />
+              <AdminRoutes
+                exact
+                path="/admin/signup"
+                component={CreateAdminPage}
+              />
               <Route exact path="/admin/login" component={AdminLoginPage} />
-              <Route exact path="/admin/signup" component={AdminSignupPage} />
               <AdminRoutes exact path="/admin/:adminId" component={AdminPage} />
               <AdminRoutes
                 exact

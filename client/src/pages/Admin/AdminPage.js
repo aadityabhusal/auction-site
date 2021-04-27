@@ -1,5 +1,4 @@
-import React, { useContext, useEffect, useState } from "react";
-import { useParams } from "react-router";
+import React, { useContext, useState } from "react";
 
 import {
   ButtonLink,
@@ -19,37 +18,17 @@ import {
 } from "../../components/User";
 
 import { AdminContext } from "../../contexts/AdminContext";
-import { DataList, AdminItemList, AdminUserList } from "../../components/Admin";
+import { DataList } from "../../components/Admin";
+import { AdminUserList } from "../../components/AdminUserList";
+import { AdminItemList } from "../../components/AdminItemList";
 
 export function AdminPage() {
-  const [admin, setAdmin] = useState();
-  const { admin: authAdmin } = useContext(AdminContext);
-  const { adminId } = useParams();
-
+  const { admin } = useContext(AdminContext);
   const [listType, setListType] = useState("");
   const [list, setList] = useState([]);
   const [items, setItems] = useState([]);
   const [users, setUsers] = useState([]);
-
-  useEffect(() => {
-    getAdmin(adminId);
-  }, [adminId]);
-
-  async function getAdmin(adminId) {
-    try {
-      let response = await fetch(`/api/admin/${adminId}`, {
-        headers: {
-          "Content-Type": "application/json",
-        },
-        credentials: "include",
-      });
-      let data = await response.json();
-      setAdmin(data);
-      // setList(data.itemsApproved);
-    } catch (error) {
-      console.log(error);
-    }
-  }
+  const [admins, setAdmins] = useState([]);
 
   async function getUsers() {
     try {
@@ -72,6 +51,7 @@ export function AdminPage() {
       console.log(error);
     }
   }
+
   async function getItems() {
     try {
       if (items.length < 1) {
@@ -94,18 +74,42 @@ export function AdminPage() {
     }
   }
 
+  async function getAdmins() {
+    try {
+      if (admins.length < 1) {
+        let response = await fetch(`/api/admin/admins`, {
+          headers: {
+            "Content-Type": "application/json",
+          },
+          credentials: "include",
+        });
+        let data = await response.json();
+        setAdmins(data);
+        setListType("admin");
+        setList(data);
+      } else {
+        setListType("admin");
+        setList(admins);
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  }
+
   return admin ? (
     <PageContainer>
       <UserHeadSection>
         <img src="/user.png" alt="user" />
         <UserHeadInfo>
           <Title>{`${admin.firstName} ${admin.lastName}`}</Title>
-          {authAdmin?._id === admin._id && (
+          {admin?._id === admin._id && (
             <>
-              <Title2>{authAdmin.email}</Title2>
+              <Title2>{admin.email}</Title2>
               <UserHeadButtons>
-                <ButtonLink to={`/admin`}>Add an Admin</ButtonLink>
-                <ButtonLink to={`/admin/${authAdmin._id}/edit`}>
+                {admin.role === 1 && (
+                  <ButtonLink to={`/admin/signup`}>Add an Admin</ButtonLink>
+                )}
+                <ButtonLink to={`/admin/${admin._id}/edit`}>
                   Edit Profile
                 </ButtonLink>
               </UserHeadButtons>
@@ -115,24 +119,29 @@ export function AdminPage() {
       </UserHeadSection>
       <UserItemsSection>
         <UserItemsNav>
-          <ButtonOption onClick={(e) => setList(admin.itemsApproved)}>
+          {/* <ButtonOption onClick={(e) => setList(admin.itemsApproved)}>
             Approved Items
           </ButtonOption>
           <ButtonOption onClick={(e) => setList(admin.usersApproved)}>
             Approved Users
-          </ButtonOption>
+          </ButtonOption> */}
           <ButtonOption onClick={(e) => getItems()}>All Items</ButtonOption>
           <ButtonOption onClick={(e) => getUsers()}>All Users</ButtonOption>
+          {admin.role === 1 && (
+            <ButtonOption onClick={(e) => getAdmins()}>All Admins</ButtonOption>
+          )}
         </UserItemsNav>
         <DataList>
           {list.length ? (
             listType === "user" ? (
-              <AdminUserList data={list} />
+              <AdminUserList data={list} type="user" />
+            ) : listType === "admin" ? (
+              <AdminUserList data={list} type="admin" />
             ) : listType === "item" ? (
               <AdminItemList data={list} />
             ) : null
           ) : (
-            <NoResults>No items to show</NoResults>
+            <NoResults>Select from Items, Users or Admins</NoResults>
           )}
         </DataList>
       </UserItemsSection>

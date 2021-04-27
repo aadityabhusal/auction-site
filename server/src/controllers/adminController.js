@@ -131,11 +131,22 @@ const getItems = async (req, res, next) => {
   }
 };
 
+const getAdmins = async (req, res, next) => {
+  try {
+    let data = await Admin.find({ role: { $ne: "1" } });
+    res.send(data);
+  } catch (error) {
+    error.status = 500;
+    return next(error);
+  }
+};
+
 module.exports = {
   createAdmin,
   getAdmin,
   getUsers,
   getItems,
+  getAdmins,
   updateAdmin,
   deleteAdmin,
   loginAdmin,
