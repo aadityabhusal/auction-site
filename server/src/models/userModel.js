@@ -25,10 +25,10 @@ const UserSchema = new mongoose.Schema({
     type: String,
     required: "Enter your address",
   },
-  role: {
-    type: Number,
-    default: 2,
-  },
+  // role: {
+  //   type: Number,
+  //   default: 2,
+  // },
   items: {
     type: Array,
     default: [],

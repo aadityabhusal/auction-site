@@ -1,13 +1,6 @@
 import React, { useContext, useState } from "react";
 import { Redirect } from "react-router";
-import {
-  Button,
-  Form,
-  Input,
-  Title,
-  FormBox,
-  Select,
-} from "../../components/Core";
+import { Button, Form, Input, Title, FormBox } from "../../components/Core";
 import { UserContext } from "../../contexts/UserContext";
 
 export function SignupPage(props) {
@@ -17,7 +10,7 @@ export function SignupPage(props) {
   const [password, setPassword] = useState("");
   const [contact, setContact] = useState("");
   const [address, setAddress] = useState("");
-  const [role, setRole] = useState();
+  // const [role, setRole] = useState();
   const { user } = useContext(UserContext);
 
   const handleSubmit = async (e) => {
@@ -29,7 +22,7 @@ export function SignupPage(props) {
       password,
       contact,
       address,
-      role,
+      // role,
     };
     try {
       let user = await fetch(`/api/user/signup`, {
@@ -90,11 +83,11 @@ export function SignupPage(props) {
           value={address}
           onChange={(e) => setAddress(e.target.value)}
         ></Input>
-        <Select onChange={(e) => setRole(e.target.value)}>
+        {/* <Select onChange={(e) => setRole(e.target.value)}>
           <option value="">Select your account type</option>
           <option value="2">Seller</option>
           <option value="3">Bidder</option>
-        </Select>
+        </Select> */}
         <Button>Signup</Button>
       </Form>
     </FormBox>

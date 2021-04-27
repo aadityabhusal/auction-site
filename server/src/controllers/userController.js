@@ -29,10 +29,7 @@ const loginUser = async (req, res, next) => {
     if (user.password !== Hex.stringify(passwordHash)) {
       throw new Error("Incorrect Password");
     }
-    const token = jwt.sign(
-      { _id: user._id, role: user.role },
-      process.env.ACCESS_TOKEN_SECRET
-    );
+    const token = jwt.sign({ _id: user._id }, process.env.ACCESS_TOKEN_SECRET);
     res.send({ uid: user._id, userToken: token });
   } catch (error) {
     error.status = 400;

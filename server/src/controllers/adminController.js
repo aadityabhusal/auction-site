@@ -124,7 +124,6 @@ const getUsers = async (req, res, next) => {
 const getItems = async (req, res, next) => {
   try {
     let data = await Item.find({});
-    console.log(data);
     res.send(data);
   } catch (error) {
     error.status = 500;

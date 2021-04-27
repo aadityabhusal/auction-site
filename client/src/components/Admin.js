@@ -1,8 +1,18 @@
 import styled from "styled-components";
+import { Input } from "./Core";
 
 export const DataList = styled.div`
   flex: 1;
   margin-top: 30px;
+
+  & a {
+    color: #3f51b5;
+    text-decoration: none;
+  }
+
+  & a:hover {
+    text-decoration: underline;
+  }
 `;
 
 export const DataListRow = styled.div`
@@ -48,8 +58,12 @@ export function AdminUserList({ data }) {
           <DataListItem title={item.email}>{item.email}</DataListItem>
           <DataListItem title={item.contact}>{item.contact}</DataListItem>
           <DataListItem title={item.address}>{item.address}</DataListItem>
-          <DataListItem title={item.status} short>
-            {item.status}
+          <DataListItem title={item.status ? "Approved" : "Not Approved"} short>
+            <Input
+              type="checkbox"
+              defaultChecked={item.status}
+              onChange={(e) => handleApproval(e, item, "user")}
+            />
           </DataListItem>
         </DataListRow>
       ))}
@@ -126,14 +140,39 @@ export function AdminItemList({ data }) {
           </DataListItem>
           <DataListItem title={item.contact}>{item.contact}</DataListItem>
           <DataListItem title={item.address}>{item.address}</DataListItem>
-          <DataListItem title={item.auctionDate}>
-            {item.auctionDate}
+          <DataListItem title={formatDate(item.auctionDate)}>
+            {formatDate(item.auctionDate)}
           </DataListItem>
-          <DataListItem title={item.status} short>
-            {item.status}
+          <DataListItem title={item.status ? "Approved" : "Not Approved"} short>
+            <Input
+              type="checkbox"
+              defaultChecked={item.status}
+              onChange={(e) => handleApproval(e, item, "item")}
+            />
           </DataListItem>
         </DataListRow>
       ))}
     </>
   );
+}
+
+async function handleApproval(e, data, type) {
+  let value = e.target.checked ? 1 : 0;
+  try {
+    await fetch(`/api/${type}/${data._id}`, {
+      method: "put",
+      headers: {
+        Accept: "application/json",
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ status: value }),
+    });
+  } catch (error) {
+    console.log(error.message);
+  }
+}
+
+function formatDate(dateString) {
+  let date = new Date(dateString);
+  return date.toUTCString();
 }

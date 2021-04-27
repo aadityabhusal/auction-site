@@ -41,12 +41,15 @@ const getItem = async (req, res, next) => {
 };
 
 const updateItem = async (req, res, next) => {
+  console.log("update");
   try {
     if (req.file) {
       req.body.image = req.file.filename;
       /* Delete the older image file */
     }
-    req.body.seller = JSON.parse(req.body.seller);
+    if (req.body.seller) {
+      req.body.seller = JSON.parse(req.body.seller);
+    }
     await Item.findOneAndUpdate({ _id: req.params.itemId }, req.body, {
       new: true,
       useFindAndModify: false,

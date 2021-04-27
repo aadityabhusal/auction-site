@@ -26,12 +26,11 @@ export function AdminPage() {
   const { admin: authAdmin } = useContext(AdminContext);
   const { adminId } = useParams();
 
-  const [listType, setListType] = useState("items");
+  const [listType, setListType] = useState("");
   const [list, setList] = useState([]);
   const [items, setItems] = useState([]);
   const [users, setUsers] = useState([]);
 
-  console.log(listType);
   useEffect(() => {
     getAdmin(adminId);
   }, [adminId]);
@@ -46,7 +45,7 @@ export function AdminPage() {
       });
       let data = await response.json();
       setAdmin(data);
-      setList(data.itemsApproved);
+      // setList(data.itemsApproved);
     } catch (error) {
       console.log(error);
     }
@@ -62,8 +61,8 @@ export function AdminPage() {
           credentials: "include",
         });
         let data = await response.json();
-        setListType("user");
         setUsers(data);
+        setListType("user");
         setList(data);
       } else {
         setListType("user");
@@ -83,12 +82,12 @@ export function AdminPage() {
           credentials: "include",
         });
         let data = await response.json();
-        setListType("item");
         setItems(data);
         setList(data);
-      } else {
         setListType("item");
+      } else {
         setList(items);
+        setListType("item");
       }
     } catch (error) {
       console.log(error);
@@ -129,9 +128,9 @@ export function AdminPage() {
           {list.length ? (
             listType === "user" ? (
               <AdminUserList data={list} />
-            ) : (
+            ) : listType === "item" ? (
               <AdminItemList data={list} />
-            )
+            ) : null
           ) : (
             <NoResults>No items to show</NoResults>
           )}
