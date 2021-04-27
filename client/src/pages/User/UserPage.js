@@ -8,6 +8,8 @@ import {
 } from "../../components/Item";
 import {
   ButtonLink,
+  ButtonOption,
+  NoResults,
   PageContainer,
   Title,
   Title2,
@@ -16,6 +18,8 @@ import {
   UserHeadSection,
   UserHeadInfo,
   UserHeadButtons,
+  UserItemsSection,
+  UserItemsNav,
 } from "../../components/User";
 import { UserContext } from "../../contexts/UserContext";
 
@@ -23,6 +27,7 @@ export function UserPage() {
   const [user, setUser] = useState();
   const { user: authUser } = useContext(UserContext);
   const { userId } = useParams();
+  const [items, setItems] = useState([]);
 
   useEffect(() => {
     getUser(userId);
@@ -30,7 +35,7 @@ export function UserPage() {
 
   const getUser = async (userId) => {
     try {
-      let response = await fetch(`/user/${userId}`, {
+      let response = await fetch(`/api/user/${userId}`, {
         headers: {
           "Content-Type": "application/json",
         },
@@ -38,6 +43,7 @@ export function UserPage() {
       });
       let data = await response.json();
       setUser(data);
+      setItems(data.items);
     } catch (error) {
       console.log(error);
     }
@@ -62,20 +68,37 @@ export function UserPage() {
           )}
         </UserHeadInfo>
       </UserHeadSection>
-      <ItemList>
-        {user.items.map((item) => (
-          <ItemCard key={item.itemId}>
-            <ItemCardImage>
-              <img src={`/uploads/${item.itemImage}`} alt={item.itemTitle} />
-            </ItemCardImage>
-            <ItemCardTitle to={`/item/${item.itemId}`}>
-              {item.itemTitle}
-            </ItemCardTitle>
-          </ItemCard>
-        ))}
-      </ItemList>
+      <UserItemsSection>
+        <UserItemsNav>
+          <ButtonOption onClick={(e) => setItems(user.items)}>
+            Selling Items
+          </ButtonOption>
+          <ButtonOption onClick={(e) => setItems(authUser.won)}>
+            Won Items
+          </ButtonOption>
+        </UserItemsNav>
+        <ItemList>
+          {items.length ? (
+            items.map((item) => (
+              <ItemCard key={item.itemId}>
+                <ItemCardImage>
+                  <img
+                    src={`/uploads/${item.itemImage}`}
+                    alt={item.itemTitle}
+                  />
+                </ItemCardImage>
+                <ItemCardTitle to={`/item/${item.itemId}`}>
+                  {item.itemTitle}
+                </ItemCardTitle>
+              </ItemCard>
+            ))
+          ) : (
+            <NoResults>No items to show</NoResults>
+          )}
+        </ItemList>
+      </UserItemsSection>
     </PageContainer>
   ) : (
-    <div style={{ textAlign: "center", marginTop: "20px" }}>Loading...</div>
+    <NoResults>Loading...</NoResults>
   );
 }

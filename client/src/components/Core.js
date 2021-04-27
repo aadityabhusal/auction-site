@@ -79,6 +79,11 @@ export const ButtonLink = styled(Button).attrs({ as: Link })`
   text-decoration: none;
 `;
 
+export const ButtonOption = styled(Button)`
+  font-size: 15px;
+  margin: 0 10px;
+`;
+
 export const Input = styled.input`
   flex: 1;
   padding: 10px;
@@ -100,4 +105,11 @@ export const Message = styled.div`
   margin-bottom: 20px;
   color: #fff;
   text-align: center;
+`;
+
+export const NoResults = styled.div`
+  flex: 1;
+  margin-top: 20px;
+  text-align: center;
+  font-weight: bold;
 `;

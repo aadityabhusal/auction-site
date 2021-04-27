@@ -51,7 +51,7 @@ export function CreateItemPage({ history }) {
 
     try {
       let response = await (
-        await fetch(`/item`, {
+        await fetch(`/api/item`, {
           method: "post",
           body: formData,
         })

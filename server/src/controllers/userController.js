@@ -10,7 +10,7 @@ const createUser = async (req, res, next) => {
     let newUser = new User(req.body);
     let user = await newUser.save();
     let { password, ...data } = await user.toJSON();
-    res.status(201).json(data);
+    res.send({ message: "User Created" });
   } catch (error) {
     error.status = 500;
     return next(error);
@@ -33,7 +33,7 @@ const loginUser = async (req, res, next) => {
       { _id: user._id, role: user.role },
       process.env.ACCESS_TOKEN_SECRET
     );
-    res.send({ uid: user._id, auctionSiteToken: token });
+    res.send({ uid: user._id, userToken: token });
   } catch (error) {
     error.status = 400;
     return next(error);
@@ -42,13 +42,10 @@ const loginUser = async (req, res, next) => {
 
 const authenticateUser = async (req, res, next) => {
   try {
-    const auctionSiteToken = req.body.auctionSiteToken;
-    if (!auctionSiteToken) throw new Error("Unauthenticated User");
+    const userToken = req.body.userToken;
+    if (!userToken) throw new Error("Unauthenticated User");
 
-    const verify = jwt.verify(
-      auctionSiteToken,
-      process.env.ACCESS_TOKEN_SECRET
-    );
+    const verify = jwt.verify(userToken, process.env.ACCESS_TOKEN_SECRET);
     if (!verify) throw new Error("Unauthenticated User");
 
     let { password, ...data } = await (

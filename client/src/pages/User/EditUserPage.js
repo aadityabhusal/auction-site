@@ -8,6 +8,7 @@ import {
   Title,
   FormBox,
   Message,
+  NoResults,
 } from "../../components/Core";
 import { UserContext } from "../../contexts/UserContext";
 
@@ -23,7 +24,7 @@ export function EditUserPage({ history }) {
 
   async function getUser(userId, authUser, history) {
     try {
-      let response = await fetch(`/user/${userId}`, {
+      let response = await fetch(`/api/user/${userId}`, {
         headers: {
           "Content-Type": "application/json",
         },
@@ -44,7 +45,7 @@ export function EditUserPage({ history }) {
     e.preventDefault();
     try {
       let response = await (
-        await fetch(`/user/${userId}`, {
+        await fetch(`/api/user/${userId}`, {
           method: "put",
           headers: {
             Accept: "application/json",
@@ -107,6 +108,6 @@ export function EditUserPage({ history }) {
       </Form>
     </FormBox>
   ) : (
-    <div style={{ textAlign: "center", marginTop: "20px" }}>Loading...</div>
+    <NoResults>Loading...</NoResults>
   );
 }

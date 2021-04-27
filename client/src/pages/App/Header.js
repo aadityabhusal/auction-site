@@ -1,15 +1,25 @@
 import React, { useContext } from "react";
 import { NavLink } from "react-router-dom";
 import { HeaderContainer } from "../../components/Core";
+import { AdminContext } from "../../contexts/AdminContext";
 import { UserContext } from "../../contexts/UserContext";
 
 export function Header() {
   const { user, setUser, setToken } = useContext(UserContext);
+  const { admin, setAdmin, setToken: setAdminToken } = useContext(AdminContext);
 
   const logout = async (e) => {
-    localStorage.removeItem("auctionSiteToken");
-    setToken("");
-    setUser(null);
+    if (localStorage.getItem("userToken") !== null) {
+      localStorage.removeItem("userToken");
+      setToken("");
+      setUser(null);
+    }
+
+    if (localStorage.getItem("adminToken") !== null) {
+      localStorage.removeItem("adminToken");
+      setAdminToken("");
+      setAdmin(null);
+    }
   };
 
   return (
@@ -28,6 +38,15 @@ export function Header() {
           <>
             <NavLink activeClassName="is-active" to={`/user/${user._id}`}>
               {`${user.firstName} ${user.lastName}`}
+            </NavLink>
+            <NavLink activeClassName="is-active" to="/login" onClick={logout}>
+              Logout
+            </NavLink>
+          </>
+        ) : admin ? (
+          <>
+            <NavLink activeClassName="is-active" to={`/admin/${admin._id}`}>
+              {`${admin.firstName} ${admin.lastName}`}
             </NavLink>
             <NavLink activeClassName="is-active" to="/login" onClick={logout}>
               Logout

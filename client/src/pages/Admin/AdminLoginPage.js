@@ -1,12 +1,12 @@
 import React, { useContext, useState } from "react";
 import { Redirect } from "react-router";
 import { Button, Input, Title, FormBox, Form } from "../../components/Core";
-import { UserContext } from "../../contexts/UserContext";
+import { AdminContext } from "../../contexts/AdminContext";
 
-export function LoginPage(props) {
+export function AdminLoginPage(props) {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const { user, setToken } = useContext(UserContext);
+  const { admin, setToken } = useContext(AdminContext);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -17,7 +17,7 @@ export function LoginPage(props) {
 
     try {
       let response = await (
-        await fetch(`/api/user/login`, {
+        await fetch(`/api/admin/login`, {
           method: "post",
           headers: {
             Accept: "application/json",
@@ -29,9 +29,9 @@ export function LoginPage(props) {
       ).json();
 
       if (!response.error) {
-        localStorage.setItem("userToken", response.userToken);
-        setToken(response.userToken);
-        props.history.push(`/user/` + response.uid);
+        localStorage.setItem("adminToken", response.adminToken);
+        setToken(response.adminToken);
+        props.history.push(`/admin/` + response.uid);
       } else {
         throw new Error(response.error);
       }
@@ -40,9 +40,9 @@ export function LoginPage(props) {
     }
   };
 
-  return !user ? (
+  return !admin ? (
     <FormBox>
-      <Title center>Login</Title>
+      <Title center>Admin Login</Title>
       <Form onSubmit={handleSubmit} method="POST">
         <Input
           type="email"
@@ -56,10 +56,10 @@ export function LoginPage(props) {
           value={password}
           onChange={(e) => setPassword(e.target.value)}
         ></Input>
-        <Button>Login</Button>
+        <Button>Admin Login</Button>
       </Form>
     </FormBox>
   ) : (
-    <Redirect to={`/user/${user._id}`} />
+    <Redirect to={`/admin/${admin._id}`} />
   );
 }

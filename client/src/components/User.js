@@ -5,6 +5,7 @@ export const UserHeadSection = styled.div`
   padding: 20px;
   border-bottom: 2px solid #34495e;
   display: flex;
+  margin-bottom: 20px;
   & img {
     width: 100px;
     height: 100px;
@@ -24,6 +25,18 @@ export const UserHeadInfo = styled.div`
 `;
 
 export const UserHeadButtons = styled.div`
+  margin-top: 20px;
   display: flex;
   justify-content: flex-end;
+`;
+
+export const UserItemsSection = styled.div``;
+
+export const UserItemsNav = styled.div`
+  display: flex;
+  margin-bottom: 20px;
+
+  & a {
+    margin-left: 15px;
+  }
 `;

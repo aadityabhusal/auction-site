@@ -19,37 +19,48 @@ import { EditAdminPage } from "../Admin/EditAdminPage";
 
 import { UserProvider } from "../../contexts/UserContext";
 import { Protected } from "../Auth/Protected";
+import { AdminRoutes } from "../Auth/AdminRoutes";
+import { CreateAdminPage } from "../Admin/CreateAdminPage";
+import { AdminLoginPage } from "../Admin/AdminLoginPage";
+import { AdminSignupPage } from "../Admin/AdminSignupPage";
+import { AdminProvider } from "../../contexts/AdminContext";
 
 function App() {
   return (
     <BrowserRouter>
-      <UserProvider>
-        <Header />
-        <GlobalContainer>
-          <Switch>
-            <Route exact path="/" component={HomePage} />
-            <Route exact path="/login" component={LoginPage} />
-            <Route exact path="/signup" component={SignupPage} />
-            <Route exact path="/search" component={SearchItemPage} />
-            <Protected exact path="/item" component={CreateItemPage} />
-            <Route exact path="/item/:itemId" component={ItemPage} />
-            <Protected
-              exact
-              path="/item/:itemId/edit"
-              component={EditItemPage}
-            />
-            <Route exact path="/user/:userId" component={UserPage} />
-            <Protected path="/user/:userId/edit" component={EditUserPage} />
-            <Protected exact path="/admin/:adminId" component={AdminPage} />
-            <Protected
-              exact
-              path="/admin/:adminId/edit"
-              component={EditAdminPage}
-            />
-            <Route component={ErrorPage} />
-          </Switch>
-        </GlobalContainer>
-      </UserProvider>
+      <AdminProvider>
+        <UserProvider>
+          <Header />
+          <GlobalContainer>
+            <Switch>
+              <Route exact path="/" component={HomePage} />
+              <Route exact path="/login" component={LoginPage} />
+              <Route exact path="/signup" component={SignupPage} />
+              <Route exact path="/search" component={SearchItemPage} />
+              <Protected exact path="/item" component={CreateItemPage} />
+              <Route exact path="/item/:itemId" component={ItemPage} />
+              <Protected
+                exact
+                path="/item/:itemId/edit"
+                component={EditItemPage}
+              />
+              <Route exact path="/user/:userId" component={UserPage} />
+              <Protected path="/user/:userId/edit" component={EditUserPage} />
+
+              <AdminRoutes exact path="/admin" component={CreateAdminPage} />
+              <Route exact path="/admin/login" component={AdminLoginPage} />
+              <Route exact path="/admin/signup" component={AdminSignupPage} />
+              <AdminRoutes exact path="/admin/:adminId" component={AdminPage} />
+              <AdminRoutes
+                exact
+                path="/admin/:adminId/edit"
+                component={EditAdminPage}
+              />
+              <Route component={ErrorPage} />
+            </Switch>
+          </GlobalContainer>
+        </UserProvider>
+      </AdminProvider>
     </BrowserRouter>
   );
 }

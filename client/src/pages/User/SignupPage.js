@@ -32,7 +32,7 @@ export function SignupPage(props) {
       role,
     };
     try {
-      let user = await fetch(`/user/signup`, {
+      let user = await fetch(`/api/user/signup`, {
         method: "post",
         headers: {
           Accept: "application/json",

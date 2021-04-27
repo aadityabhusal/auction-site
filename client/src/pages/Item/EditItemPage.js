@@ -8,6 +8,7 @@ import {
   FormBox,
   Select,
   TextArea,
+  NoResults,
 } from "../../components/Core";
 import { UserContext } from "../../contexts/UserContext";
 
@@ -50,7 +51,7 @@ export function EditItemPage({ history }) {
 
     try {
       let response = await (
-        await fetch(`/item/${itemId}`, {
+        await fetch(`/api/item/${itemId}`, {
           method: "put",
           body: formData,
         })
@@ -67,7 +68,7 @@ export function EditItemPage({ history }) {
 
   async function getItem(itemId, user, history) {
     try {
-      let response = await fetch(`/item/${itemId}`, {
+      let response = await fetch(`/api/item/${itemId}`, {
         headers: {
           "Content-Type": "application/json",
         },
@@ -152,6 +153,6 @@ export function EditItemPage({ history }) {
       </Form>
     </FormBox>
   ) : (
-    <div style={{ textAlign: "center", marginTop: "20px" }}>Loading...</div>
+    <NoResults>Loading...</NoResults>
   );
 }

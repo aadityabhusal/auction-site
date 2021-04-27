@@ -1,7 +1,12 @@
 import React, { useContext, useEffect, useState } from "react";
 import { useParams } from "react-router";
 import { Link } from "react-router-dom";
-import { ButtonLink, PageContainer, Title } from "../../components/Core";
+import {
+  ButtonLink,
+  NoResults,
+  PageContainer,
+  Title,
+} from "../../components/Core";
 import {
   ItemContainer,
   ItemImages,
@@ -32,7 +37,7 @@ export function ItemPage() {
 
   async function getItem(itemId) {
     try {
-      let response = await fetch(`/item/${itemId}`, {
+      let response = await fetch(`/api/item/${itemId}`, {
         headers: {
           "Content-Type": "application/json",
         },
@@ -99,6 +104,6 @@ export function ItemPage() {
       </ItemContainer>
     </PageContainer>
   ) : (
-    <div style={{ textAlign: "center", marginTop: "20px" }}>Loading...</div>
+    <NoResults>Loading...</NoResults>
   );
 }

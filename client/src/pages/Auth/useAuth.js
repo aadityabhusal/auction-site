@@ -7,7 +7,7 @@ export const useAuth = () => {
     (async () => {
       try {
         if (!loggedIn) {
-          let response = await fetch(`/user/auth`, {
+          let response = await fetch(`/api/user/auth`, {
             headers: {
               "Content-Type": "application/json",
             },
