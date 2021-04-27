@@ -1,11 +1,6 @@
 import React, { useContext, useEffect, useState } from "react";
 import { useParams } from "react-router";
-import {
-  ItemCard,
-  ItemCardImage,
-  ItemCardTitle,
-  ItemList,
-} from "../../components/Item";
+
 import {
   ButtonLink,
   ButtonOption,
@@ -14,6 +9,7 @@ import {
   Title,
   Title2,
 } from "../../components/Core";
+
 import {
   UserHeadSection,
   UserHeadInfo,
@@ -21,17 +17,21 @@ import {
   UserItemsSection,
   UserItemsNav,
 } from "../../components/User";
+
 import { AdminContext } from "../../contexts/AdminContext";
-import { DataList, DataListItem } from "../../components/Admin";
+import { DataList, AdminItemList, AdminUserList } from "../../components/Admin";
 
 export function AdminPage() {
   const [admin, setAdmin] = useState();
   const { admin: authAdmin } = useContext(AdminContext);
   const { adminId } = useParams();
+
+  const [listType, setListType] = useState("items");
   const [list, setList] = useState([]);
   const [items, setItems] = useState([]);
   const [users, setUsers] = useState([]);
 
+  console.log(listType);
   useEffect(() => {
     getAdmin(adminId);
   }, [adminId]);
@@ -54,7 +54,7 @@ export function AdminPage() {
 
   async function getUsers() {
     try {
-      if (!users.length) {
+      if (users.length < 1) {
         let response = await fetch(`/api/admin/users`, {
           headers: {
             "Content-Type": "application/json",
@@ -62,16 +62,20 @@ export function AdminPage() {
           credentials: "include",
         });
         let data = await response.json();
+        setListType("user");
         setUsers(data);
+        setList(data);
+      } else {
+        setListType("user");
+        setList(users);
       }
-      setList(users);
     } catch (error) {
       console.log(error);
     }
   }
   async function getItems() {
     try {
-      if (!items.length) {
+      if (items.length < 1) {
         let response = await fetch(`/api/admin/items`, {
           headers: {
             "Content-Type": "application/json",
@@ -79,9 +83,13 @@ export function AdminPage() {
           credentials: "include",
         });
         let data = await response.json();
+        setListType("item");
         setItems(data);
+        setList(data);
+      } else {
+        setListType("item");
+        setList(items);
       }
-      setList(items);
     } catch (error) {
       console.log(error);
     }
@@ -119,9 +127,11 @@ export function AdminPage() {
         </UserItemsNav>
         <DataList>
           {list.length ? (
-            list.map((item) => (
-              <DataListItem key={item._id}>{item._id}</DataListItem>
-            ))
+            listType === "user" ? (
+              <AdminUserList data={list} />
+            ) : (
+              <AdminItemList data={list} />
+            )
           ) : (
             <NoResults>No items to show</NoResults>
           )}
