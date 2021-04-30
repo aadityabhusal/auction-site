@@ -31,9 +31,28 @@ const ItemSchema = new mongoose.Schema({
       required: "Enter seller last name",
     },
   },
-  winner: {
-    type: Object,
-    default: {},
+  bidders: {
+    type: [
+      {
+        _id: {
+          type: mongoose.Schema.Types.ObjectId,
+          required: "Enter seller id",
+        },
+        firstName: {
+          type: String,
+          required: "Enter seller first name",
+        },
+        lastName: {
+          type: String,
+          required: "Enter seller last name",
+        },
+        bidAmount: {
+          type: Number,
+          required: "Enter bid amout",
+        },
+      },
+    ],
+    default: [],
   },
   image: {
     type: String,

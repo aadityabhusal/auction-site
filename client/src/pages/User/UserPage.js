@@ -80,15 +80,12 @@ export function UserPage() {
         <ItemList>
           {items.length ? (
             items.map((item) => (
-              <ItemCard key={item.itemId}>
+              <ItemCard key={item._id}>
                 <ItemCardImage>
-                  <img
-                    src={`/uploads/${item.itemImage}`}
-                    alt={item.itemTitle}
-                  />
+                  <img src={`/uploads/${item.image}`} alt={item.title} />
                 </ItemCardImage>
-                <ItemCardTitle to={`/item/${item.itemId}`}>
-                  {item.itemTitle}
+                <ItemCardTitle to={`/item/${item._id}`}>
+                  {item.title}
                 </ItemCardTitle>
               </ItemCard>
             ))

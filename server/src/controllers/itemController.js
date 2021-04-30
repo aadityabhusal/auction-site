@@ -12,9 +12,9 @@ const createItem = async (req, res, next) => {
       {
         $push: {
           items: {
-            itemId: item._id,
-            itemTitle: item.title,
-            itemImage: item.image,
+            _id: item._id,
+            title: item.title,
+            image: item.image,
           },
         },
       },
@@ -32,8 +32,8 @@ const createItem = async (req, res, next) => {
 
 const getItem = async (req, res, next) => {
   try {
-    let site = await Item.findById(req.params.itemId);
-    res.send(site);
+    let item = await Item.findById(req.params.itemId);
+    res.send(item);
   } catch (error) {
     error.status = 500;
     return next(error);
@@ -71,4 +71,36 @@ const deleteItem = async (req, res, next) => {
   }
 };
 
-module.exports = { createItem, getItem, updateItem, deleteItem };
+const placeBid = async (req, res, next) => {
+  try {
+    let item = await Item.findOneAndUpdate(
+      { _id: req.params.itemId },
+      { bidAmount: req.body.bidAmount, $push: { bidders: req.body } },
+      {
+        new: true,
+        useFindAndModify: false,
+      }
+    );
+
+    await User.findOneAndUpdate(
+      { _id: req.body._id },
+      {
+        $push: {
+          bidsPlaced: { _id: item._id, title: item.title, image: item.image },
+        },
+      },
+      {
+        new: true,
+        useFindAndModify: false,
+      }
+    );
+
+    res.send(item);
+  } catch (error) {
+    console.log(error);
+    error.status = 500;
+    return next(error);
+  }
+};
+
+module.exports = { createItem, getItem, updateItem, deleteItem, placeBid };

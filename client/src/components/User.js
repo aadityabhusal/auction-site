@@ -1,3 +1,4 @@
+import { Link } from "react-router-dom";
 import styled from "styled-components";
 
 export const UserHeadSection = styled.div`
@@ -39,4 +40,10 @@ export const UserItemsNav = styled.div`
   & a {
     margin-left: 15px;
   }
+`;
+
+export const UserNameLink = styled(Link)`
+  font-weight: bold;
+  text-decoration: none;
+  color: #3f51b5;
 `;

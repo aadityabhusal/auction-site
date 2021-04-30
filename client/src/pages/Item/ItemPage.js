@@ -1,8 +1,9 @@
 import React, { useContext, useEffect, useState } from "react";
 import { useParams } from "react-router";
-import { Link } from "react-router-dom";
 import {
+  Button,
   ButtonLink,
+  Input,
   NoResults,
   PageContainer,
   Title,
@@ -15,7 +16,20 @@ import {
   ItemInfoTitle,
   ItemInfoValue,
 } from "../../components/Item";
+
+import {
+  BiddingContainer,
+  BiddingSection,
+  BiddersSection,
+  BidderContainer,
+  BidderImage,
+  BidderInfo,
+  BidderForm,
+  BidAmount,
+} from "../../components/Bidding";
+
 import { UserContext } from "../../contexts/UserContext";
+import { UserNameLink } from "../../components/User";
 
 const categories = [
   "General",
@@ -28,12 +42,15 @@ const categories = [
 
 export function ItemPage() {
   const [item, setItem] = useState();
+  const [bidAmountInput, setBidAmountInput] = useState("");
   const { user } = useContext(UserContext);
   const { itemId } = useParams();
 
   useEffect(() => {
-    getItem(itemId);
-  }, [itemId]);
+    if (!item) {
+      getItem(itemId);
+    }
+  }, [itemId, item]);
 
   async function getItem(itemId) {
     try {
@@ -55,6 +72,41 @@ export function ItemPage() {
     return date.toUTCString();
   }
 
+  async function placeBids(e) {
+    e.preventDefault();
+    let data = {
+      _id: user._id,
+      firstName: user.firstName,
+      lastName: user.lastName,
+      bidAmount: bidAmountInput,
+    };
+    if (bidAmountInput > item.bidAmount) {
+      setBidAmountInput("");
+      try {
+        let response = await (
+          await fetch(`/api/item/${itemId}/placeBid`, {
+            method: "put",
+            headers: {
+              Accept: "application/json",
+              "Content-Type": "application/json",
+            },
+            credentials: "include",
+            body: JSON.stringify(data),
+          })
+        ).json();
+        if (!response.error) {
+          setItem(response);
+        } else {
+          throw new Error(response.error);
+        }
+      } catch (error) {}
+    }
+  }
+
+  function checkBidder(id) {
+    return item.bidders.findIndex((item) => item._id === id);
+  }
+
   return item ? (
     <PageContainer>
       <ItemContainer>
@@ -66,9 +118,9 @@ export function ItemPage() {
           <ItemInfoItem>
             <ItemInfoTitle>Seller Name: </ItemInfoTitle>
             <ItemInfoValue>
-              <Link
+              <UserNameLink
                 to={`/user/${item.seller._id}`}
-              >{`${item.seller.firstName} ${item.seller.lastName}`}</Link>
+              >{`${item.seller.firstName} ${item.seller.lastName}`}</UserNameLink>
             </ItemInfoValue>
           </ItemInfoItem>
           <ItemInfoItem>
@@ -102,6 +154,49 @@ export function ItemPage() {
           </ItemInfoItem>
         </ItemInfo>
       </ItemContainer>
+      <BiddingContainer>
+        <BiddingSection>
+          <BidAmount>
+            <p>Current Bid:</p>
+            <h2>£{item.bidAmount}</h2>
+          </BidAmount>
+          {user._id !== item.seller._id && Boolean(checkBidder(user._id)) && (
+            <BidderForm onSubmit={placeBids} method="POST">
+              <Input
+                type="number"
+                name="bidAmount"
+                value={bidAmountInput}
+                placeholder="Enter your bid amount"
+                onChange={(e) => setBidAmountInput(e.target.value)}
+              />
+              <Button>Place your Bid</Button>
+            </BidderForm>
+          )}
+        </BiddingSection>
+        <BiddersSection>
+          {item.bidders.length ? (
+            item.bidders
+              .sort((a, b) => b.bidAmount - a.bidAmount)
+              .map((item) => (
+                <BidderContainer key={item._id}>
+                  <BidderImage>
+                    <img src="/user.png" alt="user" />
+                  </BidderImage>
+                  <BidderInfo>
+                    <h3>
+                      <UserNameLink
+                        to={`/user/${item._id}`}
+                      >{`${item.firstName} ${item.lastName}`}</UserNameLink>
+                    </h3>
+                    <h2>£{item.bidAmount}</h2>
+                  </BidderInfo>
+                </BidderContainer>
+              ))
+          ) : (
+            <NoResults>No Bids Placed</NoResults>
+          )}
+        </BiddersSection>
+      </BiddingContainer>
     </PageContainer>
   ) : (
     <NoResults>Loading...</NoResults>

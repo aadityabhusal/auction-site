@@ -25,16 +25,61 @@ const UserSchema = new mongoose.Schema({
     type: String,
     required: "Enter your address",
   },
-  // role: {
-  //   type: Number,
-  //   default: 2,
-  // },
   items: {
-    type: Array,
+    type: [
+      {
+        _id: {
+          type: mongoose.Schema.Types.ObjectId,
+          required: "Enter item id",
+        },
+        title: {
+          type: String,
+          required: "Enter item title",
+        },
+        image: {
+          type: String,
+          required: "Enter item image",
+        },
+      },
+    ],
     default: [],
   },
-  won: {
-    type: Array,
+  bidsWon: {
+    type: [
+      {
+        _id: {
+          type: mongoose.Schema.Types.ObjectId,
+          required: "Enter item id",
+        },
+        title: {
+          type: String,
+          required: "Enter item title",
+        },
+        image: {
+          type: String,
+          required: "Enter item image",
+        },
+      },
+    ],
+    default: [],
+  },
+  bidsPlaced: {
+    type: [
+      {
+        _id: {
+          type: mongoose.Schema.Types.ObjectId,
+          required: "Enter item id",
+        },
+        title: {
+          type: String,
+          required: "Enter item title",
+        },
+        image: {
+          type: String,
+          required: "Enter item image",
+        },
+      },
+    ],
     default: [],
   },
   status: {
