@@ -4,6 +4,7 @@ const ItemSchema = new mongoose.Schema({
   title: {
     type: String,
     required: "Enter the item title",
+    index: true,
   },
   category: {
     type: Number,
@@ -30,6 +31,27 @@ const ItemSchema = new mongoose.Schema({
       type: String,
       required: "Enter seller last name",
     },
+  },
+  winner: {
+    type: {
+      _id: {
+        type: mongoose.Schema.Types.ObjectId,
+        required: "Enter seller id",
+      },
+      firstName: {
+        type: String,
+        required: "Enter seller first name",
+      },
+      lastName: {
+        type: String,
+        required: "Enter seller last name",
+      },
+      bidAmount: {
+        type: Number,
+        required: "Enter bid amout",
+      },
+    },
+    default: {},
   },
   bidders: {
     type: [
@@ -79,5 +101,4 @@ const ItemSchema = new mongoose.Schema({
     required: "Enter the auction date",
   },
 });
-
 module.exports = mongoose.model("Item", ItemSchema);

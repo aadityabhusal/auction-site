@@ -7,6 +7,7 @@ const {
   deleteItem,
   createItem,
   placeBid,
+  searchItem,
 } = require("../controllers/itemController");
 
 const router = express.Router();
@@ -32,6 +33,7 @@ const upload = multer({ storage: imageStorage });
 const routes = () => {
   router.post("/", upload.single("image"), createItem);
   router.put("/:itemId/placeBid", placeBid);
+  router.get("/search/:value", searchItem);
 
   router
     .route("/:itemId")

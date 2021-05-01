@@ -1,4 +1,4 @@
-import React, { useContext, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 
 import {
   ButtonLink,
@@ -21,6 +21,7 @@ import { AdminContext } from "../../contexts/AdminContext";
 import { DataList } from "../../components/Admin";
 import { AdminUserList } from "../../components/AdminUserList";
 import { AdminItemList } from "../../components/AdminItemList";
+import { AdminBidderList } from "../../components/AdminBiddersList";
 
 export function AdminPage() {
   const { admin } = useContext(AdminContext);
@@ -29,6 +30,11 @@ export function AdminPage() {
   const [items, setItems] = useState([]);
   const [users, setUsers] = useState([]);
   const [admins, setAdmins] = useState([]);
+  // const [winners, setWinners] = useState([]);
+
+  useEffect(() => {
+    getItems();
+  }, []);
 
   async function getUsers() {
     try {
@@ -96,6 +102,11 @@ export function AdminPage() {
     }
   }
 
+  async function getAuctionWinners() {
+    setList(items);
+    setListType("winners");
+  }
+
   return admin ? (
     <PageContainer>
       <UserHeadSection>
@@ -127,6 +138,9 @@ export function AdminPage() {
           </ButtonOption> */}
           <ButtonOption onClick={(e) => getItems()}>All Items</ButtonOption>
           <ButtonOption onClick={(e) => getUsers()}>All Users</ButtonOption>
+          <ButtonOption onClick={(e) => getAuctionWinners()}>
+            Auction Winners
+          </ButtonOption>
           {admin.role === 1 && (
             <ButtonOption onClick={(e) => getAdmins()}>All Admins</ButtonOption>
           )}
@@ -139,6 +153,8 @@ export function AdminPage() {
               <AdminUserList data={list} type="admin" />
             ) : listType === "item" ? (
               <AdminItemList data={list} />
+            ) : listType === "winners" ? (
+              <AdminBidderList data={list} />
             ) : null
           ) : (
             <NoResults>Select from Items, Users or Admins</NoResults>

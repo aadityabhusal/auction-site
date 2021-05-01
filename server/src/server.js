@@ -11,6 +11,7 @@ mongoose.Promise = global.Promise;
 mongoose.connect("mongodb://localhost/AuctionSite", {
   useNewUrlParser: true,
   useUnifiedTopology: true,
+  useCreateIndex: true,
 });
 
 app.use(cookieParser());

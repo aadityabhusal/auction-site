@@ -155,43 +155,65 @@ export function ItemPage() {
         </ItemInfo>
       </ItemContainer>
       <BiddingContainer>
-        <BiddingSection>
-          <BidAmount>
-            <p>Current Bid:</p>
-            <h2>£{item.bidAmount}</h2>
-          </BidAmount>
-          {user._id !== item.seller._id && Boolean(checkBidder(user._id)) && (
-            <BidderForm onSubmit={placeBids} method="POST">
-              <Input
-                type="number"
-                name="bidAmount"
-                value={bidAmountInput}
-                placeholder="Enter your bid amount"
-                onChange={(e) => setBidAmountInput(e.target.value)}
-              />
-              <Button>Place your Bid</Button>
-            </BidderForm>
-          )}
-        </BiddingSection>
+        {!item.winner && (
+          <BiddingSection>
+            <BidAmount>
+              <p>Current Bid:</p>
+              <h2>£{item.bidAmount}</h2>
+            </BidAmount>
+            {user &&
+              user?._id !== item.seller._id &&
+              Boolean(checkBidder(user?._id)) &&
+              !item.winner && (
+                <BidderForm onSubmit={placeBids} method="POST">
+                  <Input
+                    type="number"
+                    name="bidAmount"
+                    value={bidAmountInput}
+                    placeholder="Enter your bid amount"
+                    onChange={(e) => setBidAmountInput(e.target.value)}
+                  />
+                  <Button>Place your Bid</Button>
+                </BidderForm>
+              )}
+          </BiddingSection>
+        )}
         <BiddersSection>
           {item.bidders.length ? (
-            item.bidders
-              .sort((a, b) => b.bidAmount - a.bidAmount)
-              .map((item) => (
-                <BidderContainer key={item._id}>
-                  <BidderImage>
-                    <img src="/user.png" alt="user" />
-                  </BidderImage>
-                  <BidderInfo>
-                    <h3>
-                      <UserNameLink
-                        to={`/user/${item._id}`}
-                      >{`${item.firstName} ${item.lastName}`}</UserNameLink>
-                    </h3>
-                    <h2>£{item.bidAmount}</h2>
-                  </BidderInfo>
-                </BidderContainer>
-              ))
+            item.winner ? (
+              <BidderContainer key={item.winner._id}>
+                <BidderImage>
+                  <img src="/user.png" alt="user" />
+                </BidderImage>
+                <BidderInfo>
+                  <h3>
+                    <UserNameLink
+                      to={`/user/${item.winner._id}`}
+                    >{`${item.winner.firstName} ${item.winner.lastName}`}</UserNameLink>
+                  </h3>
+                  <h2>£{item.winner.bidAmount}</h2>
+                </BidderInfo>
+                <h3>Winner!</h3>
+              </BidderContainer>
+            ) : (
+              item.bidders
+                .sort((a, b) => b.bidAmount - a.bidAmount)
+                .map((item) => (
+                  <BidderContainer key={item._id}>
+                    <BidderImage>
+                      <img src="/user.png" alt="user" />
+                    </BidderImage>
+                    <BidderInfo>
+                      <h3>
+                        <UserNameLink
+                          to={`/user/${item._id}`}
+                        >{`${item.firstName} ${item.lastName}`}</UserNameLink>
+                      </h3>
+                      <h2>£{item.bidAmount}</h2>
+                    </BidderInfo>
+                  </BidderContainer>
+                ))
+            )
           ) : (
             <NoResults>No Bids Placed</NoResults>
           )}

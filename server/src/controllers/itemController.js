@@ -41,7 +41,6 @@ const getItem = async (req, res, next) => {
 };
 
 const updateItem = async (req, res, next) => {
-  console.log("update");
   try {
     if (req.file) {
       req.body.image = req.file.filename;
@@ -50,6 +49,7 @@ const updateItem = async (req, res, next) => {
     if (req.body.seller) {
       req.body.seller = JSON.parse(req.body.seller);
     }
+
     await Item.findOneAndUpdate({ _id: req.params.itemId }, req.body, {
       new: true,
       useFindAndModify: false,
@@ -97,10 +97,27 @@ const placeBid = async (req, res, next) => {
 
     res.send(item);
   } catch (error) {
+    error.status = 500;
+    return next(error);
+  }
+};
+
+const searchItem = async (req, res, next) => {
+  try {
+    let items = await Item.find({ $text: { $search: req.params.value } });
+    console.log("OK", items);
+  } catch (error) {
     console.log(error);
     error.status = 500;
     return next(error);
   }
 };
 
-module.exports = { createItem, getItem, updateItem, deleteItem, placeBid };
+module.exports = {
+  createItem,
+  getItem,
+  updateItem,
+  deleteItem,
+  placeBid,
+  searchItem,
+};

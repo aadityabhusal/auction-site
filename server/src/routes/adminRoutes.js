@@ -9,6 +9,7 @@ const {
   getUsers,
   getItems,
   getAdmins,
+  approveWinner,
 } = require("../controllers/adminController");
 
 const router = express.Router();
@@ -20,6 +21,7 @@ const routes = () => {
   router.get("/users", getUsers);
   router.get("/items", getItems);
   router.get("/admins", getAdmins);
+  router.put("/approveWinner", approveWinner);
 
   router.route("/:adminId").get(getAdmin).put(updateAdmin).delete(deleteAdmin);
 

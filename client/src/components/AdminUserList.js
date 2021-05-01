@@ -22,8 +22,11 @@ export function AdminUserList({ data, type }) {
       </DataListRow>
       {data.map((item) => (
         <DataListRow key={item._id}>
-          <DataListItem title={item.firstName}>{item.firstName}</DataListItem>
-          <DataListItem title={item.lastName}>{item.lastName}</DataListItem>
+          <DataListItem title={item.firstName + " " + item.lastName}>
+            <a href={`/user/${item._id}`} rel="noreferrer" target="_blank">
+              {item.firstName + " " + item.lastName}
+            </a>
+          </DataListItem>
           <DataListItem title={item.email}>{item.email}</DataListItem>
           <DataListItem title={item.contact}>{item.contact}</DataListItem>
           <DataListItem title={item.address}>{item.address}</DataListItem>

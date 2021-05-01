@@ -2,6 +2,7 @@ require("dotenv").config({ path: __dirname + "/../.env" });
 const Admin = require("../models/adminModel");
 const User = require("../models/userModel");
 const Item = require("../models/itemModel");
+const mongoose = require("mongoose");
 
 const sha256 = require("crypto-js/sha256");
 const Hex = require("crypto-js/enc-hex");
@@ -141,6 +142,44 @@ const getAdmins = async (req, res, next) => {
   }
 };
 
+const approveWinner = async (req, res, next) => {
+  try {
+    let task = {
+      $push: {
+        bidsWon: req.body.item,
+      },
+    };
+    if (!req.body.approved) {
+      task = {
+        $pull: {
+          bidsWon: {
+            _id: mongoose.Types.ObjectId(req.body.item._id),
+          },
+        },
+      };
+    }
+    let bidderId = req.body.winner._id || req.body.item.winner;
+    await User.findOneAndUpdate({ _id: bidderId }, task, {
+      new: true,
+      useFindAndModify: false,
+    });
+
+    await Item.findOneAndUpdate(
+      { _id: req.body.item._id },
+      { winner: req.body.winner },
+      {
+        new: true,
+        useFindAndModify: false,
+      }
+    );
+
+    res.send({ message: "Winner Approved" });
+  } catch (error) {
+    error.status = 500;
+    return next(error);
+  }
+};
+
 module.exports = {
   createAdmin,
   getAdmin,
@@ -151,4 +190,5 @@ module.exports = {
   deleteAdmin,
   loginAdmin,
   authenticateAdmin,
+  approveWinner,
 };

@@ -96,6 +96,6 @@ export function UserPage() {
       </UserItemsSection>
     </PageContainer>
   ) : (
-    <NoResults>Loading...</NoResults>
+    <NoResults>No such user found</NoResults>
   );
 }
