@@ -193,7 +193,7 @@ export function ItemPage() {
                   </h3>
                   <h2>£{item.winner.bidAmount}</h2>
                 </BidderInfo>
-                <h3>Winner!</h3>
+                <h3 style={{ color: "#3f51b5" }}>Winner!</h3>
               </BidderContainer>
             ) : (
               item.bidders

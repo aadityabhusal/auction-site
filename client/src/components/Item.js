@@ -7,11 +7,14 @@ export const ItemList = styled.div`
 `;
 
 export const ItemCard = styled.div`
-  flex: 0 0 21%;
-  margin: 20px 2%;
+  flex: 0 0 200px;
+  margin: 20px 15px;
   padding: 5px;
   border-radius: 4px;
   box-shadow: 0 5px 10px 0 #444;
+  /* display: flex;
+  flex-direction: column; */
+  place-self: flex-start;
 `;
 
 export const ItemCardImage = styled.div`

@@ -8,6 +8,7 @@ const {
   createItem,
   placeBid,
   searchItem,
+  getHomePageItems,
 } = require("../controllers/itemController");
 
 const router = express.Router();
@@ -34,6 +35,7 @@ const routes = () => {
   router.post("/", upload.single("image"), createItem);
   router.put("/:itemId/placeBid", placeBid);
   router.get("/search/:value", searchItem);
+  router.get("/homepage", getHomePageItems);
 
   router
     .route("/:itemId")

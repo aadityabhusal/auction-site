@@ -15,12 +15,7 @@ export function SearchItemPage() {
   const handleSearch = async (e) => {
     if (e.keyCode === 13) {
       try {
-        let response = await fetch(`/api/item/search/${search}`, {
-          headers: {
-            "Content-Type": "application/json",
-          },
-          credentials: "include",
-        });
+        let response = await fetch(`/api/item/search/${search}`);
         let data = await response.json();
         console.log(data);
         setResults(data);
