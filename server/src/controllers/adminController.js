@@ -144,26 +144,6 @@ const getAdmins = async (req, res, next) => {
 
 const approveWinner = async (req, res, next) => {
   try {
-    let task = {
-      $push: {
-        bidsWon: req.body.item,
-      },
-    };
-    if (!req.body.approved) {
-      task = {
-        $pull: {
-          bidsWon: {
-            _id: mongoose.Types.ObjectId(req.body.item._id),
-          },
-        },
-      };
-    }
-    let bidderId = req.body.winner._id || req.body.item.winner;
-    await User.findOneAndUpdate({ _id: bidderId }, task, {
-      new: true,
-      useFindAndModify: false,
-    });
-
     await Item.findOneAndUpdate(
       { _id: req.body.item._id },
       { winner: req.body.winner },

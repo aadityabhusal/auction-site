@@ -51,7 +51,7 @@ export function CreateAdminPage(props) {
 
   return admin?.role === 1 ? (
     <FormBox>
-      <Title center>Create your account</Title>
+      <Title center>Create a new Admin</Title>
       <Form onSubmit={handleSubmit} method="POST">
         <Input
           type="text"
@@ -95,7 +95,7 @@ export function CreateAdminPage(props) {
           onChange={(e) => setAddress(e.target.value)}
           required
         ></Input>
-        <Button>Signup</Button>
+        <Button>Create Admin</Button>
       </Form>
     </FormBox>
   ) : (

@@ -1,5 +1,6 @@
 const Item = require("../models/itemModel");
 const User = require("../models/userModel");
+const mongoose = require("mongoose");
 
 const createItem = async (req, res, next) => {
   try {
@@ -64,8 +65,25 @@ const updateItem = async (req, res, next) => {
 const deleteItem = async (req, res, next) => {
   try {
     await Item.deleteOne({ _id: req.params.itemId });
+
+    await User.findOneAndUpdate(
+      { _id: req.body.sellerId },
+      {
+        $pull: {
+          items: {
+            _id: mongoose.Types.ObjectId(req.params.itemId),
+          },
+        },
+      },
+      {
+        new: true,
+        useFindAndModify: false,
+      }
+    );
+
     res.send({ message: "Item Deleted" });
   } catch (error) {
+    console.log(error);
     error.status = 500;
     return next(error);
   }
@@ -76,19 +94,6 @@ const placeBid = async (req, res, next) => {
     let item = await Item.findOneAndUpdate(
       { _id: req.params.itemId },
       { bidAmount: req.body.bidAmount, $push: { bidders: req.body } },
-      {
-        new: true,
-        useFindAndModify: false,
-      }
-    );
-
-    await User.findOneAndUpdate(
-      { _id: req.body._id },
-      {
-        $push: {
-          bidsPlaced: { _id: item._id, title: item.title, image: item.image },
-        },
-      },
       {
         new: true,
         useFindAndModify: false,

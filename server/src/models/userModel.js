@@ -44,44 +44,6 @@ const UserSchema = new mongoose.Schema({
     ],
     default: [],
   },
-  bidsWon: {
-    type: [
-      {
-        _id: {
-          type: mongoose.Schema.Types.ObjectId,
-          required: "Enter item id",
-        },
-        title: {
-          type: String,
-          required: "Enter item title",
-        },
-        image: {
-          type: String,
-          required: "Enter item image",
-        },
-      },
-    ],
-    default: [],
-  },
-  bidsPlaced: {
-    type: [
-      {
-        _id: {
-          type: mongoose.Schema.Types.ObjectId,
-          required: "Enter item id",
-        },
-        title: {
-          type: String,
-          required: "Enter item title",
-        },
-        image: {
-          type: String,
-          required: "Enter item image",
-        },
-      },
-    ],
-    default: [],
-  },
   status: {
     type: Number,
     default: 0,

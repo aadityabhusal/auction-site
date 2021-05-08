@@ -9,6 +9,11 @@ import {
   Select,
   TextArea,
   NoResults,
+  DialogOverlay,
+  DialogBox,
+  DialogHead,
+  DialogText,
+  DialogAction,
 } from "../../components/Core";
 import { UserContext } from "../../contexts/UserContext";
 
@@ -22,7 +27,7 @@ const categories = [
 
 export function EditItemPage({ history }) {
   const [item, setItem] = useState("");
-
+  const [dialogBox, setDialogBox] = useState(false);
   const { itemId } = useParams();
   const { user } = useContext(UserContext);
 
@@ -31,12 +36,6 @@ export function EditItemPage({ history }) {
   }, [itemId, user, history]);
 
   const handleSubmit = async (e) => {
-    // let seller = {
-    //   _id: user._id,
-    //   firstName: user.firstName,
-    //   lastName: user.lastName,
-    // };
-
     e.preventDefault();
     const formData = new FormData();
     formData.append("title", item.title);
@@ -89,13 +88,52 @@ export function EditItemPage({ history }) {
     setItem((prev) => ({ ...prev, [field]: value }));
   };
 
+  async function deleteItem(e) {
+    try {
+      let itemData = {
+        itemId: itemId,
+        sellerId: user._id,
+      };
+      let response = await (
+        await fetch(`/api/item/${itemId}`, {
+          method: "delete",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(itemData),
+        })
+      ).json();
+      if (!response.error) {
+        history.push(`/user/${user._id}`);
+      } else {
+        throw new Error(response.error);
+      }
+    } catch (error) {
+      console.log(error.message);
+    }
+  }
+
   return item ? (
     <FormBox>
+      {dialogBox && (
+        <DialogOverlay>
+          <DialogBox>
+            <DialogHead>Delete Item</DialogHead>
+            <DialogText>Are you sure you want to delete this item?</DialogText>
+            <DialogAction>
+              <Button color="#c0392b" onClick={deleteItem}>
+                Delete
+              </Button>
+              <Button onClick={(e) => setDialogBox(false)}>Cancel</Button>
+            </DialogAction>
+          </DialogBox>
+        </DialogOverlay>
+      )}
       <Title center>Edit Item Information</Title>
       <Form onSubmit={handleSubmit} method="POST" enctype="multipart/form-data">
         <Input
           type="text"
-          placeholder="Enter the Product Title"
+          placeholder="Enter the Item Title"
           value={item.title}
           onChange={(e) => handleInput(e.target.value, "title")}
           required
@@ -149,8 +187,11 @@ export function EditItemPage({ history }) {
           onChange={(e) => handleInput(e.target.value, "description")}
           required
         ></TextArea>
-        <Button>Create a Product</Button>
+        <Button>Edit Item</Button>
       </Form>
+      <Button color="#c0392b" onClick={(e) => setDialogBox(true)}>
+        Delete Item
+      </Button>
     </FormBox>
   ) : (
     <NoResults>Loading...</NoResults>

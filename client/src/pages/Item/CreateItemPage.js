@@ -72,7 +72,7 @@ export function CreateItemPage({ history }) {
       <Form onSubmit={handleSubmit} method="POST" enctype="multipart/form-data">
         <Input
           type="text"
-          placeholder="Enter the Product Title"
+          placeholder="Enter the Item Title"
           value={title}
           onChange={(e) => setTitle(e.target.value)}
           required
@@ -124,7 +124,7 @@ export function CreateItemPage({ history }) {
           onChange={(e) => setDescription(e.target.value)}
           required
         ></TextArea>
-        <Button>Create a Product</Button>
+        <Button>Create a Item</Button>
       </Form>
     </FormBox>
   );

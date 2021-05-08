@@ -50,7 +50,10 @@ export const Title2 = styled(Title).attrs({ as: "h2" })`
 `;
 
 export const FormBox = styled.div`
+  position: relative;
   margin-top: 30px;
+  display: flex;
+  flex-direction: column;
   flex: 0 0 400px;
   border-radius: 5px;
   padding: 20px;
@@ -59,6 +62,7 @@ export const FormBox = styled.div`
 
 export const Form = styled.form`
   margin: 0;
+  margin-bottom: 10px;
   flex: 1;
   display: flex;
   flex-direction: column;
@@ -70,9 +74,10 @@ export const Button = styled.button`
   border-radius: 3px;
   box-shadow: 0 2px 5px 0 #444;
   color: #fff;
-  background-color: #3f51b5;
+  background-color: ${(props) => props.color || "#3f51b5"};
   cursor: pointer;
   outline: 0;
+  margin: 0 5px;
 `;
 
 export const ButtonLink = styled(Button).attrs({ as: Link })`
@@ -112,4 +117,42 @@ export const NoResults = styled.div`
   margin-top: 20px;
   text-align: center;
   font-weight: bold;
+`;
+
+export const DialogOverlay = styled.div`
+  position: absolute;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.5);
+`;
+
+export const DialogBox = styled.div`
+  background: #fff;
+  display: flex;
+  flex-direction: column;
+  border: 1px solid #666;
+  border-radius: 5px;
+`;
+
+export const DialogHead = styled.div`
+  padding: 5px;
+  text-align: center;
+  font-weight: bold;
+`;
+
+export const DialogText = styled.div`
+  padding: 10px;
+  border-top: 1px solid #666;
+  border-bottom: 1px solid #666;
+`;
+
+export const DialogAction = styled.div`
+  padding: 10px;
+  display: flex;
+  justify-content: flex-end;
 `;

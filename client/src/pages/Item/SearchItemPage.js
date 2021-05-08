@@ -19,7 +19,9 @@ export function SearchItemPage() {
         let data = await response.json();
         console.log(data);
         setResults(data);
-      } catch (error) {}
+      } catch (error) {
+        console.log(error.message);
+      }
     }
   };
 
