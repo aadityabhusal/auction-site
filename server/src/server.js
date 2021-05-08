@@ -21,7 +21,7 @@ app.use("/uploads", express.static(path.join(__dirname, "../uploads")));
 app.use("/api/", routes());
 
 app.use((err, req, res, next) => {
-  res.status(err.status).json({ error: err.message });
+  res.status(err.status).json({ error: err });
 });
 
 app.listen(port, () => console.log(`Listening on port ${port}`));

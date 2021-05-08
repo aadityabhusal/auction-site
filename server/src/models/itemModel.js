@@ -4,7 +4,6 @@ const ItemSchema = new mongoose.Schema({
   title: {
     type: String,
     required: "Enter the item title",
-    index: true,
   },
   category: {
     type: Number,

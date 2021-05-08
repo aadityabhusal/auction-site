@@ -4,6 +4,7 @@ import {
   Button,
   ButtonLink,
   Input,
+  Message,
   NoResults,
   PageContainer,
   Title,
@@ -43,6 +44,8 @@ const categories = [
 export function ItemPage() {
   const [item, setItem] = useState();
   const [bidAmountInput, setBidAmountInput] = useState("");
+  const [error, setError] = useState("");
+
   const { user } = useContext(UserContext);
   const { itemId } = useParams();
 
@@ -82,6 +85,7 @@ export function ItemPage() {
     };
     if (bidAmountInput > item.bidAmount) {
       setBidAmountInput("");
+      setError("");
       try {
         let response = await (
           await fetch(`/api/item/${itemId}/placeBid`, {
@@ -100,12 +104,14 @@ export function ItemPage() {
           throw new Error(response.error);
         }
       } catch (error) {}
+    } else {
+      setError("Bid amount must be greater than current bid");
     }
   }
 
-  function checkBidder(id) {
-    return item.bidders.findIndex((item) => item._id === id);
-  }
+  // function checkBidder(id) {
+  //   return item.bidders.findIndex((item) => item._id === id);
+  // }
 
   return item ? (
     <PageContainer>
@@ -155,27 +161,25 @@ export function ItemPage() {
         </ItemInfo>
       </ItemContainer>
       <BiddingContainer>
+        {error && <Message color="#c0392b">{error}</Message>}
         {!item.winner && (
           <BiddingSection>
             <BidAmount>
               <p>Current Bid:</p>
               <h2>£{item.bidAmount}</h2>
             </BidAmount>
-            {user &&
-              user?._id !== item.seller._id &&
-              Boolean(checkBidder(user?._id)) &&
-              !item.winner && (
-                <BidderForm onSubmit={placeBids} method="POST">
-                  <Input
-                    type="number"
-                    name="bidAmount"
-                    value={bidAmountInput}
-                    placeholder="Enter your bid amount"
-                    onChange={(e) => setBidAmountInput(e.target.value)}
-                  />
-                  <Button>Place your Bid</Button>
-                </BidderForm>
-              )}
+            {user && user?._id !== item.seller._id && !item.winner && (
+              <BidderForm onSubmit={placeBids} method="POST">
+                <Input
+                  type="number"
+                  name="bidAmount"
+                  value={bidAmountInput}
+                  placeholder="Enter your bid amount"
+                  onChange={(e) => setBidAmountInput(e.target.value)}
+                />
+                <Button>Place your Bid</Button>
+              </BidderForm>
+            )}
           </BiddingSection>
         )}
         <BiddersSection>
@@ -198,8 +202,8 @@ export function ItemPage() {
             ) : (
               item.bidders
                 .sort((a, b) => b.bidAmount - a.bidAmount)
-                .map((item) => (
-                  <BidderContainer key={item._id}>
+                .map((item, i) => (
+                  <BidderContainer key={item._id + "-" + i}>
                     <BidderImage>
                       <img src="/user.png" alt="user" />
                     </BidderImage>

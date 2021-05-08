@@ -7,13 +7,13 @@ const jwt = require("jsonwebtoken");
 
 const createUser = async (req, res, next) => {
   try {
-    req.body.password = sha256(req.body.password);
+    req.body.password = req.body.password && sha256(req.body.password);
     let newUser = new User(req.body);
     let user = await newUser.save();
     let { password, ...data } = await user.toJSON();
     res.send({ message: "User Created" });
   } catch (error) {
-    error.status = 500;
+    error.status = 400;
     return next(error);
   }
 };
@@ -25,13 +25,16 @@ const loginUser = async (req, res, next) => {
     let user = await User.findOne({ email });
 
     if (!Boolean(user)) {
-      throw new Error("User not found");
+      res.send({ error: "User not found" });
+    } else if (user.password !== Hex.stringify(passwordHash)) {
+      res.send({ error: "Incorrect Password" });
+    } else {
+      const token = jwt.sign(
+        { _id: user._id },
+        process.env.ACCESS_TOKEN_SECRET
+      );
+      res.send({ uid: user._id, userToken: token });
     }
-    if (user.password !== Hex.stringify(passwordHash)) {
-      throw new Error("Incorrect Password");
-    }
-    const token = jwt.sign({ _id: user._id }, process.env.ACCESS_TOKEN_SECRET);
-    res.send({ uid: user._id, userToken: token });
   } catch (error) {
     error.status = 400;
     return next(error);

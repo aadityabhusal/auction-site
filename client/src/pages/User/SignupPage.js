@@ -1,6 +1,13 @@
 import React, { useContext, useState } from "react";
 import { Redirect } from "react-router";
-import { Button, Form, Input, Title, FormBox } from "../../components/Core";
+import {
+  Button,
+  Form,
+  Input,
+  Title,
+  FormBox,
+  Message,
+} from "../../components/Core";
 import { UserContext } from "../../contexts/UserContext";
 
 export function SignupPage(props) {
@@ -11,6 +18,8 @@ export function SignupPage(props) {
   const [contact, setContact] = useState("");
   const [address, setAddress] = useState("");
   // const [role, setRole] = useState();
+  const [error, setError] = useState([]);
+
   const { user } = useContext(UserContext);
 
   const handleSubmit = async (e) => {
@@ -25,18 +34,20 @@ export function SignupPage(props) {
       // role,
     };
     try {
-      let user = await fetch(`/api/user/signup`, {
-        method: "post",
-        headers: {
-          Accept: "application/json",
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(data),
-      });
-      if (!user.error) {
+      let response = await (
+        await fetch(`/api/user/signup`, {
+          method: "post",
+          headers: {
+            Accept: "application/json",
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(data),
+        })
+      ).json();
+      if (!response.error) {
         props.history.push("/login");
       } else {
-        throw new Error(user.error);
+        setError(Object.values(response.error.errors));
       }
     } catch (error) {
       console.log(error.message);
@@ -45,6 +56,11 @@ export function SignupPage(props) {
 
   return !user ? (
     <FormBox>
+      {error.map((item) => (
+        <Message color="#c0392b" key={item.message}>
+          {item.message}
+        </Message>
+      ))}
       <Title center>Create your account</Title>
       <Form onSubmit={handleSubmit} method="POST">
         <Input

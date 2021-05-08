@@ -10,7 +10,7 @@ const jwt = require("jsonwebtoken");
 
 const createAdmin = async (req, res, next) => {
   try {
-    req.body.password = sha256(req.body.password);
+    req.body.password = req.body.password && sha256(req.body.password);
     let newAdmin = new Admin(req.body);
     let admin = await newAdmin.save();
     let { password, ...data } = await admin.toJSON();

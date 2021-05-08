@@ -60,6 +60,7 @@ export const BiddersSection = styled.div`
 export const BidderContainer = styled.div`
   display: flex;
   border-bottom: 1px solid #3f51b5;
+  padding: 10px;
 `;
 
 export const BidderImage = styled.div`

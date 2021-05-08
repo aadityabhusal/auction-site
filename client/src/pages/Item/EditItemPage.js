@@ -85,6 +85,10 @@ export function EditItemPage({ history }) {
   }
 
   const handleInput = (value, field) => {
+    if (field === "auctionDate") {
+      value = value || new Date().toISOString().slice(0, -5);
+      console.log(value);
+    }
     setItem((prev) => ({ ...prev, [field]: value }));
   };
 

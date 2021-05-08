@@ -7,6 +7,7 @@ import {
   FormBox,
   Select,
   TextArea,
+  Message,
 } from "../../components/Core";
 import { UserContext } from "../../contexts/UserContext";
 
@@ -27,6 +28,7 @@ export function CreateItemPage({ history }) {
   const [contact, setContact] = useState("");
   const [address, setAddress] = useState("");
   const [auctionDate, setAuctionDate] = useState("");
+  const [error, setError] = useState([]);
 
   const { user } = useContext(UserContext);
 
@@ -59,7 +61,7 @@ export function CreateItemPage({ history }) {
       if (!response.error) {
         history.push(`/user/${user._id}`);
       } else {
-        throw new Error(response.error);
+        setError(Object.values(response.error.errors));
       }
     } catch (error) {
       console.log(error.message);
@@ -68,6 +70,11 @@ export function CreateItemPage({ history }) {
 
   return (
     <FormBox>
+      {error.map((item) => (
+        <Message color="#c0392b" key={item.message}>
+          {item.message}
+        </Message>
+      ))}
       <Title center>Create a new Item</Title>
       <Form onSubmit={handleSubmit} method="POST" enctype="multipart/form-data">
         <Input
@@ -75,7 +82,6 @@ export function CreateItemPage({ history }) {
           placeholder="Enter the Item Title"
           value={title}
           onChange={(e) => setTitle(e.target.value)}
-          required
         ></Input>
         <Select onChange={(e) => setCategory(e.target.value)}>
           <option value="">Select a category</option>
@@ -90,27 +96,23 @@ export function CreateItemPage({ history }) {
           placeholder="Enter the Bid Amount"
           value={bidAmount}
           onChange={(e) => setBidAmount(e.target.value)}
-          required
         ></Input>
         <Input
           type="number"
           placeholder="Enter your Contact Number"
           value={contact}
           onChange={(e) => setContact(e.target.value)}
-          required
         ></Input>
         <Input
           type="text"
           placeholder="Enter the Address"
           value={address}
           onChange={(e) => setAddress(e.target.value)}
-          required
         ></Input>
         <Input
           type="datetime-local"
           value={auctionDate}
           onChange={(e) => setAuctionDate(e.target.value)}
-          required
         ></Input>
         <Input
           type="file"
@@ -122,7 +124,6 @@ export function CreateItemPage({ history }) {
           rows={5}
           value={description}
           onChange={(e) => setDescription(e.target.value)}
-          required
         ></TextArea>
         <Button>Create a Item</Button>
       </Form>

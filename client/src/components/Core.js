@@ -105,9 +105,9 @@ export const TextArea = styled(Input).attrs({ as: "textarea" })``;
 export const Message = styled.div`
   padding: 10px;
   border: none;
-  background-color: #27ae60;
+  background-color: ${(props) => props.color || "#27ae60"};
   box-shadow: 0 2px 5px 0 #444;
-  margin-bottom: 20px;
+  margin-bottom: 10px;
   color: #fff;
   text-align: center;
 `;

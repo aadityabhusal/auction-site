@@ -6,6 +6,7 @@ import {
   Title,
   FormBox,
   NoResults,
+  Message,
 } from "../../components/Core";
 import { AdminContext } from "../../contexts/AdminContext";
 
@@ -16,6 +17,8 @@ export function CreateAdminPage(props) {
   const [password, setPassword] = useState("");
   const [contact, setContact] = useState("");
   const [address, setAddress] = useState("");
+  const [error, setError] = useState([]);
+
   const { admin } = useContext(AdminContext);
 
   const handleSubmit = async (e) => {
@@ -42,7 +45,7 @@ export function CreateAdminPage(props) {
       if (!response.error) {
         props.history.push(`/admin/${admin._id}`);
       } else {
-        throw new Error(response.error);
+        setError(Object.values(response.error.errors));
       }
     } catch (error) {
       console.log(error.message);
@@ -51,6 +54,11 @@ export function CreateAdminPage(props) {
 
   return admin?.role === 1 ? (
     <FormBox>
+      {error.map((item) => (
+        <Message color="#c0392b" key={item.message}>
+          {item.message}
+        </Message>
+      ))}
       <Title center>Create a new Admin</Title>
       <Form onSubmit={handleSubmit} method="POST">
         <Input
@@ -58,42 +66,36 @@ export function CreateAdminPage(props) {
           placeholder="Enter your First Name"
           value={firstName}
           onChange={(e) => setFirstName(e.target.value)}
-          required
         ></Input>
         <Input
           type="text"
           placeholder="Enter your Last Name"
           value={lastName}
           onChange={(e) => setLastName(e.target.value)}
-          required
         ></Input>
         <Input
           type="email"
           placeholder="Enter your email"
           value={email}
           onChange={(e) => setEmail(e.target.value)}
-          required
         ></Input>
         <Input
           type="password"
           placeholder="Enter your password"
           value={password}
           onChange={(e) => setPassword(e.target.value)}
-          required
         ></Input>
         <Input
           type="number"
           placeholder="Enter your Contact Number"
           value={contact}
           onChange={(e) => setContact(e.target.value)}
-          required
         ></Input>
         <Input
           type="text"
           placeholder="Enter your Address"
           value={address}
           onChange={(e) => setAddress(e.target.value)}
-          required
         ></Input>
         <Button>Create Admin</Button>
       </Form>
