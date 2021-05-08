@@ -9,11 +9,17 @@ import {
   FormBox,
   Message,
   NoResults,
+  DialogOverlay,
+  DialogBox,
+  DialogHead,
+  DialogText,
+  DialogAction,
 } from "../../components/Core";
 import { UserContext } from "../../contexts/UserContext";
 
 export function EditUserPage({ history }) {
   const [user, setUser] = useState();
+  const [dialogBox, setDialogBox] = useState(false);
   const [updated, setUpdated] = useState(false);
   const { user: authUser, setUser: setAuthUser } = useContext(UserContext);
   const { userId } = useParams();
@@ -69,8 +75,45 @@ export function EditUserPage({ history }) {
     setUser((prev) => ({ ...prev, [field]: e.target.value }));
   };
 
+  async function deleteUser(e) {
+    try {
+      let response = await (
+        await fetch(`/api/user/${userId}`, {
+          method: "delete",
+          headers: {
+            "Content-Type": "application/json",
+          },
+        })
+      ).json();
+      if (!response.error) {
+        localStorage.removeItem("userToken");
+        window.location = "/";
+      } else {
+        throw new Error(response.error);
+      }
+    } catch (error) {
+      console.log(error.message);
+    }
+  }
+
   return user ? (
     <FormBox>
+      {dialogBox && (
+        <DialogOverlay>
+          <DialogBox>
+            <DialogHead>Delete Profile</DialogHead>
+            <DialogText>
+              Are you sure you want to delete your profile?
+            </DialogText>
+            <DialogAction>
+              <Button color="#c0392b" onClick={deleteUser}>
+                Delete
+              </Button>
+              <Button onClick={(e) => setDialogBox(false)}>Cancel</Button>
+            </DialogAction>
+          </DialogBox>
+        </DialogOverlay>
+      )}
       {updated && <Message>Your profile was updated!</Message>}
       <Title center>Update your profile</Title>
       <Form onSubmit={handleSubmit} method="POST">
@@ -111,6 +154,9 @@ export function EditUserPage({ history }) {
         ></Input>
         <Button>Update Profile</Button>
       </Form>
+      <Button color="#c0392b" onClick={(e) => setDialogBox(true)}>
+        Delete Profile
+      </Button>
     </FormBox>
   ) : (
     <NoResults>Loading...</NoResults>

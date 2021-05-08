@@ -1,5 +1,6 @@
 require("dotenv").config({ path: __dirname + "/../.env" });
 const User = require("../models/userModel");
+const Item = require("../models/itemModel");
 const sha256 = require("crypto-js/sha256");
 const Hex = require("crypto-js/enc-hex");
 const jwt = require("jsonwebtoken");
@@ -87,7 +88,10 @@ const updateUser = async (req, res, next) => {
 const deleteUser = async (req, res, next) => {
   try {
     await User.deleteOne({ _id: req.params.userId });
-    res.sendStatus(200);
+
+    await Item.deleteMany({ "seller._id": req.params.userId });
+
+    res.send({ message: "User Deleted" });
   } catch (error) {
     error.status = 500;
     return next(error);

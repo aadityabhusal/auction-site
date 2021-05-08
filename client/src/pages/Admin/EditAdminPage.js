@@ -9,11 +9,17 @@ import {
   FormBox,
   Message,
   NoResults,
+  DialogOverlay,
+  DialogBox,
+  DialogHead,
+  DialogText,
+  DialogAction,
 } from "../../components/Core";
 import { AdminContext } from "../../contexts/AdminContext";
 
 export function EditAdminPage({ history }) {
   const [admin, setAdmin] = useState();
+  const [dialogBox, setDialogBox] = useState(false);
   const [updated, setUpdated] = useState(false);
   const { admin: authAdmin, setAdmin: setAuthAdmin } = useContext(AdminContext);
   const { adminId } = useParams();
@@ -50,8 +56,45 @@ export function EditAdminPage({ history }) {
     setAdmin((prev) => ({ ...prev, [field]: e.target.value }));
   };
 
+  async function deleteAdmin(e) {
+    try {
+      let response = await (
+        await fetch(`/api/admin/${adminId}`, {
+          method: "delete",
+          headers: {
+            "Content-Type": "application/json",
+          },
+        })
+      ).json();
+      if (!response.error) {
+        localStorage.removeItem("adminToken");
+        window.location = "/";
+      } else {
+        throw new Error(response.error);
+      }
+    } catch (error) {
+      console.log(error.message);
+    }
+  }
+
   return admin ? (
     <FormBox>
+      {dialogBox && (
+        <DialogOverlay>
+          <DialogBox>
+            <DialogHead>Delete Profile</DialogHead>
+            <DialogText>
+              Are you sure you want to delete your profile?
+            </DialogText>
+            <DialogAction>
+              <Button color="#c0392b" onClick={deleteAdmin}>
+                Delete
+              </Button>
+              <Button onClick={(e) => setDialogBox(false)}>Cancel</Button>
+            </DialogAction>
+          </DialogBox>
+        </DialogOverlay>
+      )}
       {updated && <Message>Your profile was updated!</Message>}
       <Title center>Update your profile</Title>
       <Form onSubmit={handleSubmit} method="POST">
@@ -92,6 +135,12 @@ export function EditAdminPage({ history }) {
         ></Input>
         <Button>Update Profile</Button>
       </Form>
+
+      {admin.role !== 1 && (
+        <Button color="#c0392b" onClick={(e) => setDialogBox(true)}>
+          Delete Profile
+        </Button>
+      )}
     </FormBox>
   ) : (
     <NoResults>Loading...</NoResults>

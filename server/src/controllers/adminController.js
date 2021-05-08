@@ -95,7 +95,7 @@ const updateAdmin = async (req, res, next) => {
 const deleteAdmin = async (req, res, next) => {
   try {
     await Admin.deleteOne({ _id: req.params.adminId });
-    res.sendStatus(200);
+    res.send({ message: "Admin Deleted" });
   } catch (error) {
     error.status = 500;
     return next(error);
