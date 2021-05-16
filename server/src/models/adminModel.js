@@ -29,14 +29,6 @@ const AdminSchema = new mongoose.Schema({
     type: Number,
     default: 2,
   },
-  itemsApproved: {
-    type: Array,
-    default: [],
-  },
-  usersApproved: {
-    type: Array,
-    default: [],
-  },
   status: {
     type: Number,
     default: 0,
