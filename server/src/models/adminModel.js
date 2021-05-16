@@ -39,4 +39,9 @@ const AdminSchema = new mongoose.Schema({
   },
 });
 
+AdminSchema.pre("findOneAndUpdate", function (next) {
+  this.options.runValidators = true;
+  next();
+});
+
 module.exports = mongoose.model("Admin", AdminSchema);

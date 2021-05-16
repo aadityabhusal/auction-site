@@ -11,6 +11,9 @@ const jwt = require("jsonwebtoken");
 const createAdmin = async (req, res, next) => {
   try {
     req.body.password = req.body.password && sha256(req.body.password);
+    if (await Admin.exists({ email: req.body.email })) {
+      throw new Error("Email already exists");
+    }
     let newAdmin = new Admin(req.body);
     let admin = await newAdmin.save();
     let { password, ...data } = await admin.toJSON();
@@ -72,6 +75,7 @@ const getAdmin = async (req, res, next) => {
     });
     res.send(data);
   } catch (error) {
+    console.log(error);
     error.status = 500;
     return next(error);
   }

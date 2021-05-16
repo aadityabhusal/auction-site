@@ -1,6 +1,6 @@
 const app = require("./app");
-const port = 8000;
 const mongoose = require("mongoose");
+const port = 8000;
 
 mongoose.Promise = global.Promise;
 mongoose.connect("mongodb://localhost/AuctionSite", {

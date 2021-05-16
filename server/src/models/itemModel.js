@@ -100,4 +100,10 @@ const ItemSchema = new mongoose.Schema({
     required: "Enter the auction date",
   },
 });
+
+ItemSchema.pre("findOneAndUpdate", function (next) {
+  this.options.runValidators = true;
+  next();
+});
+
 module.exports = mongoose.model("Item", ItemSchema);
