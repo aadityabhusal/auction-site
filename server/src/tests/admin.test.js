@@ -11,7 +11,6 @@ mongoose.connect("mongodb://localhost/AuctionSite_Test", {
 
 const Admin = require("../models/adminModel");
 
-/* 
 describe("POST - /admin/login", () => {
   describe("Email and Password given", () => {
     test("Should respond with a status code of 200", async () => {
@@ -32,9 +31,9 @@ describe("POST - /admin/login", () => {
   });
 
   describe("Email and Password missing", () => {
-    test("Should respond with a status code of 400", async () => {
+    test("Should respond with a status code of 200", async () => {
       const response = await request(app).post("/api/admin/login").send({});
-      expect(response.statusCode).toBe(400);
+      expect(response.statusCode).toBe(200);
     });
 
     test("Should respond with error", async () => {
@@ -42,10 +41,8 @@ describe("POST - /admin/login", () => {
       expect(response.body.error).toBeDefined();
     });
   });
-}); 
-*/
+});
 
-/* 
 describe("POST - /admin/signup", () => {
   describe("All required values given", () => {
     beforeAll(async () => {
@@ -103,9 +100,8 @@ describe("POST - /admin/signup", () => {
   afterAll(async () => {
     await mongoose.connection.close();
   });
-}); */
+});
 
-/* 
 describe("POST - /admin/auth", () => {
   describe("Admin token given", () => {
     test("Should respond with a status code of 200", async () => {
@@ -156,9 +152,7 @@ describe("POST - /admin/auth", () => {
     await mongoose.connection.close();
   });
 });
-*/
 
-/* 
 describe("PUT - /admin/:adminId", () => {
   describe("All required values given", () => {
     test("Should respond with a status code of 200", async () => {
@@ -215,7 +209,6 @@ describe("PUT - /admin/:adminId", () => {
     await mongoose.connection.close();
   });
 });
-*/
 
 /* 
 describe("POST - /admin/approveWinner", () => {

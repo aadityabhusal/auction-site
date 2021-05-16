@@ -31,16 +31,16 @@ const loginAdmin = async (req, res, next) => {
     let admin = await Admin.findOne({ email });
 
     if (!Boolean(admin)) {
-      throw new Error("Admin not found");
+      res.send({ error: "Admin not found" });
+    } else if (admin.password !== Hex.stringify(passwordHash)) {
+      res.send({ error: "Incorrect Password" });
+    } else {
+      const token = jwt.sign(
+        { _id: admin._id, role: admin.role },
+        process.env.ACCESS_TOKEN_SECRET
+      );
+      res.send({ uid: admin._id, adminToken: token });
     }
-    if (admin.password !== Hex.stringify(passwordHash)) {
-      throw new Error("Incorrect Password");
-    }
-    const token = jwt.sign(
-      { _id: admin._id, role: admin.role },
-      process.env.ACCESS_TOKEN_SECRET
-    );
-    res.send({ uid: admin._id, adminToken: token });
   } catch (error) {
     error.status = 400;
     return next(error);

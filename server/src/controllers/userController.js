@@ -8,12 +8,15 @@ const jwt = require("jsonwebtoken");
 const createUser = async (req, res, next) => {
   try {
     req.body.password = req.body.password && sha256(req.body.password);
+    if (await User.exists({ email: req.body.email })) {
+      throw new Error("Email already exists");
+    }
     let newUser = new User(req.body);
     let user = await newUser.save();
     let { password, ...data } = await user.toJSON();
     res.send({ message: "User Created" });
   } catch (error) {
-    error.status = 400;
+    error.status = 500;
     return next(error);
   }
 };
