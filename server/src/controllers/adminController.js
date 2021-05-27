@@ -25,25 +25,20 @@ const createAdmin = async (req, res, next) => {
 };
 
 const loginAdmin = async (req, res, next) => {
-  try {
-    let email = req.body.email;
-    let passwordHash = sha256(req.body.password);
-    let admin = await Admin.findOne({ email });
+  let email = req.body.email;
+  let passwordHash = sha256(req.body.password);
+  let admin = await Admin.findOne({ email });
 
-    if (!Boolean(admin)) {
-      res.send({ error: "Admin not found" });
-    } else if (admin.password !== Hex.stringify(passwordHash)) {
-      res.send({ error: "Incorrect Password" });
-    } else {
-      const token = jwt.sign(
-        { _id: admin._id, role: admin.role },
-        process.env.ACCESS_TOKEN_SECRET
-      );
-      res.send({ uid: admin._id, adminToken: token });
-    }
-  } catch (error) {
-    error.status = 400;
-    return next(error);
+  if (!Boolean(admin)) {
+    res.send({ error: "Admin not found" });
+  } else if (admin.password !== Hex.stringify(passwordHash)) {
+    res.send({ error: "Incorrect Password" });
+  } else {
+    const token = jwt.sign(
+      { _id: admin._id, role: admin.role },
+      process.env.ACCESS_TOKEN_SECRET
+    );
+    res.send({ uid: admin._id, adminToken: token });
   }
 };
 
@@ -53,7 +48,7 @@ const authenticateAdmin = async (req, res, next) => {
     if (!adminToken) throw new Error("Unauthenticated Admin");
 
     const verify = jwt.verify(adminToken, process.env.ACCESS_TOKEN_SECRET);
-    if (!verify) throw new Error("Unauthenticated Admin");
+    if (!verify) throw new Error("Verification Failed");
 
     let { password, ...data } = await (
       await Admin.findById(verify._id)
@@ -61,22 +56,6 @@ const authenticateAdmin = async (req, res, next) => {
     res.send(data);
   } catch (error) {
     error.status = 200;
-    return next(error);
-  }
-};
-
-const getAdmin = async (req, res, next) => {
-  try {
-    let data = await Admin.findById(req.params.adminId, {
-      firstName: 1,
-      lastName: 1,
-      itemsApproved: 1,
-      usersApproved: 1,
-    });
-    res.send(data);
-  } catch (error) {
-    console.log(error);
-    error.status = 500;
     return next(error);
   }
 };
@@ -107,43 +86,28 @@ const deleteAdmin = async (req, res, next) => {
 };
 
 const getUsers = async (req, res, next) => {
-  try {
-    let data = await User.find(
-      {},
-      {
-        firstName: 1,
-        lastName: 1,
-        email: 1,
-        contact: 1,
-        address: 1,
-        status: 1,
-      }
-    );
-    res.send(data);
-  } catch (error) {
-    error.status = 500;
-    return next(error);
-  }
+  let data = await User.find(
+    {},
+    {
+      firstName: 1,
+      lastName: 1,
+      email: 1,
+      contact: 1,
+      address: 1,
+      status: 1,
+    }
+  );
+  res.send(data);
 };
 
 const getItems = async (req, res, next) => {
-  try {
-    let data = await Item.find({});
-    res.send(data);
-  } catch (error) {
-    error.status = 500;
-    return next(error);
-  }
+  let data = await Item.find({});
+  res.send(data);
 };
 
 const getAdmins = async (req, res, next) => {
-  try {
-    let data = await Admin.find({ role: { $ne: "1" } });
-    res.send(data);
-  } catch (error) {
-    error.status = 500;
-    return next(error);
-  }
+  let data = await Admin.find({ role: { $ne: "1" } });
+  res.send(data);
 };
 
 const approveWinner = async (req, res, next) => {
@@ -156,7 +120,6 @@ const approveWinner = async (req, res, next) => {
         useFindAndModify: false,
       }
     );
-
     res.send({ message: "Winner Approved" });
   } catch (error) {
     error.status = 500;
@@ -166,7 +129,6 @@ const approveWinner = async (req, res, next) => {
 
 module.exports = {
   createAdmin,
-  getAdmin,
   getUsers,
   getItems,
   getAdmins,

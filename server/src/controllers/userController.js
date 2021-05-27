@@ -22,25 +22,17 @@ const createUser = async (req, res, next) => {
 };
 
 const loginUser = async (req, res, next) => {
-  try {
-    let email = req.body.email;
-    let passwordHash = sha256(req.body.password);
-    let user = await User.findOne({ email });
+  let email = req.body.email;
+  let passwordHash = sha256(req.body.password);
+  let user = await User.findOne({ email });
 
-    if (!Boolean(user)) {
-      res.send({ error: "User not found" });
-    } else if (user.password !== Hex.stringify(passwordHash)) {
-      res.send({ error: "Incorrect Password" });
-    } else {
-      const token = jwt.sign(
-        { _id: user._id },
-        process.env.ACCESS_TOKEN_SECRET
-      );
-      res.send({ uid: user._id, userToken: token });
-    }
-  } catch (error) {
-    error.status = 400;
-    return next(error);
+  if (!Boolean(user)) {
+    res.send({ error: "User not found" });
+  } else if (user.password !== Hex.stringify(passwordHash)) {
+    res.send({ error: "Incorrect Password" });
+  } else {
+    const token = jwt.sign({ _id: user._id }, process.env.ACCESS_TOKEN_SECRET);
+    res.send({ uid: user._id, userToken: token });
   }
 };
 
@@ -50,7 +42,7 @@ const authenticateUser = async (req, res, next) => {
     if (!userToken) throw new Error("Unauthenticated User");
 
     const verify = jwt.verify(userToken, process.env.ACCESS_TOKEN_SECRET);
-    if (!verify) throw new Error("Unauthenticated User");
+    if (!verify) throw new Error("Verification Failed");
 
     let { password, ...data } = await (
       await User.findById(verify._id)

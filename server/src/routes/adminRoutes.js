@@ -1,6 +1,5 @@
 const express = require("express");
 const {
-  getAdmin,
   createAdmin,
   updateAdmin,
   deleteAdmin,
@@ -23,7 +22,7 @@ const routes = () => {
   router.get("/admins", getAdmins);
   router.put("/approveWinner", approveWinner);
 
-  router.route("/:adminId").get(getAdmin).put(updateAdmin).delete(deleteAdmin);
+  router.route("/:adminId").put(updateAdmin).delete(deleteAdmin);
 
   return router;
 };

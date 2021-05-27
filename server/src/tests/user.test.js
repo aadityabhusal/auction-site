@@ -1,13 +1,20 @@
 const request = require("supertest");
-const app = require("../app");
 const mongoose = require("mongoose");
 
-mongoose.Promise = global.Promise;
-mongoose.connect("mongodb://localhost/AuctionSite_Test", {
-  useNewUrlParser: true,
-  useUnifiedTopology: true,
-  useCreateIndex: true,
+beforeAll(async () => {
+  mongoose.Promise = global.Promise;
+  await mongoose.connect("mongodb://localhost/AuctionSite_Test", {
+    useNewUrlParser: true,
+    useUnifiedTopology: true,
+    useCreateIndex: true,
+  });
 });
+
+afterAll(async () => {
+  await mongoose.connection.close();
+});
+
+const app = require("../app");
 
 const User = require("../models/userModel");
 
@@ -30,6 +37,24 @@ describe("POST - /user/login", () => {
     });
   });
 
+  describe("Incorrect Password given", () => {
+    test("Should respond with a status code of 200", async () => {
+      const response = await request(app).post("/api/user/login").send({
+        email: "testuser@forthebys.com",
+        password: "testuser",
+      });
+      expect(response.statusCode).toBe(200);
+    });
+
+    test("Should respond with error", async () => {
+      const response = await request(app).post("/api/user/login").send({
+        email: "testuser@forthebys.com",
+        password: "testuser",
+      });
+      expect(response.body.error).toBeDefined();
+    });
+  });
+
   describe("Email and Password missing", () => {
     test("Should respond with a status code of 200", async () => {
       const response = await request(app).post("/api/user/login").send({});
@@ -46,7 +71,7 @@ describe("POST - /user/login", () => {
 describe("POST - /user/signup", () => {
   describe("All required values given", () => {
     beforeAll(async () => {
-      await User.remove({ status: 0 });
+      await User.deleteMany({ status: 0 });
     });
     test("Should respond with a status code of 200", async () => {
       const response = await request(app).post("/api/user/signup").send({
@@ -96,10 +121,6 @@ describe("POST - /user/signup", () => {
       expect(response.body.error).toBeDefined();
     });
   });
-
-  afterAll(async () => {
-    await mongoose.connection.close();
-  });
 });
 
 describe("POST - /user/auth", () => {
@@ -107,7 +128,7 @@ describe("POST - /user/auth", () => {
     test("Should respond with a status code of 200", async () => {
       const response = await request(app).post("/api/user/auth").send({
         userToken:
-          "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2MGEwZmE1NDRkNTgyNzIxZGNjMGZjMzYiLCJpYXQiOjE2MjExNjM3NDF9.qKVKxO2AbrpnTpctMNe_7ITU-ECPgNo_KycEkKrSeYI",
+          "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2MGEwZmE1NDRkNTgyNzIxZGNjMGZjMzYiLCJpYXQiOjE2MjIwOTAyMzB9.sp4WZjkQ4M8ZAaxolyaVCK0KS3K9UfM40Opq2t8aN0Q",
       });
       expect(response.statusCode).toBe(200);
     });
@@ -115,9 +136,9 @@ describe("POST - /user/auth", () => {
     test("Should respond with user details", async () => {
       const response = await request(app).post("/api/user/auth").send({
         userToken:
-          "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2MGEwZmE1NDRkNTgyNzIxZGNjMGZjMzYiLCJpYXQiOjE2MjExNjM3NDF9.qKVKxO2AbrpnTpctMNe_7ITU-ECPgNo_KycEkKrSeYI",
+          "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2MGEwZmE1NDRkNTgyNzIxZGNjMGZjMzYiLCJpYXQiOjE2MjIwOTAyMzB9.sp4WZjkQ4M8ZAaxolyaVCK0KS3K9UfM40Opq2t8aN0Q",
       });
-      expect(response.body).toBeDefined();
+      expect(response.body._id).toBeDefined();
     });
   });
 
@@ -147,9 +168,6 @@ describe("POST - /user/auth", () => {
       });
       expect(response.body.error).toBeDefined();
     });
-  });
-  afterAll(async () => {
-    await mongoose.connection.close();
   });
 });
 
@@ -205,7 +223,63 @@ describe("PUT - /user/:userId", () => {
       expect(response.body.error).toBeDefined();
     });
   });
-  afterAll(async () => {
-    await mongoose.connection.close();
+});
+
+describe("GET - /user/:userId", () => {
+  describe("Valid User Id Provided", () => {
+    test("Should respond with a status code of 200", async () => {
+      const response = await request(app).get(
+        "/api/user/60a0fa544d582721dcc0fc36"
+      );
+      expect(response.statusCode).toBe(200);
+    });
+
+    test("Should respond with an array", async () => {
+      const response = await request(app).get(
+        "/api/user/60a0fa544d582721dcc0fc36"
+      );
+      expect(response.body._id).toBeDefined();
+    });
+  });
+
+  describe("Invalid Valid User Id Provided", () => {
+    test("Should respond with a status code of 500", async () => {
+      const response = await request(app).get("/api/user/123");
+      expect(response.statusCode).toBe(500);
+    });
+
+    test("Should respond with an error", async () => {
+      const response = await request(app).get("/api/user/123");
+      expect(response.body.error).toBeDefined();
+    });
+  });
+});
+
+describe("DELETE - /user/:userId", () => {
+  describe("Wrong Values Provided", () => {
+    test("Should respond with a status code of 500", async () => {
+      const response = await request(app).delete("/api/user/123").send({
+        _id: "123",
+      });
+      expect(response.statusCode).toBe(500);
+    });
+
+    test("Should respond with error", async () => {
+      const response = await request(app).delete("/api/user/123").send({
+        _id: "123",
+      });
+      expect(response.body.error).toBeDefined();
+    });
+  });
+
+  describe("All required values given", () => {
+    test("Should respond with a status code of 200", async () => {
+      const response = await request(app)
+        .delete("/api/user/60af24064b62262b48488344")
+        .send({
+          _id: "60af24064b62262b48488344",
+        });
+      expect(response.statusCode).toBe(200);
+    });
   });
 });

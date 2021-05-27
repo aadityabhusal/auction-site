@@ -99,7 +99,6 @@ const placeBid = async (req, res, next) => {
         useFindAndModify: false,
       }
     );
-
     res.send(item);
   } catch (error) {
     error.status = 500;
@@ -108,24 +107,14 @@ const placeBid = async (req, res, next) => {
 };
 
 const searchItem = async (req, res, next) => {
-  try {
-    let regex = new RegExp(req.params.value, "i");
-    let items = await Item.find({ title: regex });
-    res.send(items);
-  } catch (error) {
-    error.status = 500;
-    return next(error);
-  }
+  let regex = new RegExp(req.params.value, "i");
+  let items = await Item.find({ title: regex });
+  res.send(items);
 };
 
 const getHomePageItems = async (req, res, next) => {
-  try {
-    let item = await Item.find({}).sort({ auctionDate: -1 }).limit(20);
-    res.send(item);
-  } catch (error) {
-    error.status = 500;
-    return next(error);
-  }
+  let item = await Item.find({}).sort({ auctionDate: -1 }).limit(20);
+  res.send(item);
 };
 
 module.exports = {

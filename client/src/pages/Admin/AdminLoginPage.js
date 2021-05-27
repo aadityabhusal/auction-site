@@ -1,11 +1,19 @@
 import React, { useContext, useState } from "react";
 import { Redirect } from "react-router";
-import { Button, Input, Title, FormBox, Form } from "../../components/Core";
+import {
+  Button,
+  Input,
+  Title,
+  FormBox,
+  Form,
+  Message,
+} from "../../components/Core";
 import { AdminContext } from "../../contexts/AdminContext";
 
 export function AdminLoginPage(props) {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [error, setError] = useState("");
   const { admin, setToken } = useContext(AdminContext);
 
   const handleSubmit = async (e) => {
@@ -33,7 +41,7 @@ export function AdminLoginPage(props) {
         setToken(response.adminToken);
         props.history.push(`/admin/` + response.uid);
       } else {
-        throw new Error(response.error);
+        setError(response.error);
       }
     } catch (error) {
       console.log(error.message);
@@ -42,6 +50,7 @@ export function AdminLoginPage(props) {
 
   return !admin ? (
     <FormBox>
+      {error && <Message color="#c0392b">{error}</Message>}
       <Title center>Admin Login</Title>
       <Form onSubmit={handleSubmit} method="POST">
         <Input
