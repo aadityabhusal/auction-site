@@ -7,7 +7,6 @@ beforeAll(async () => {
   await mongoose.connect("mongodb://localhost/AuctionSite_Test", {
     useNewUrlParser: true,
     useUnifiedTopology: true,
-    useCreateIndex: true,
   });
 });
 
@@ -93,7 +92,7 @@ describe("POST - /item", () => {
 });
 
 describe("GET - /item/:itemId", () => {
-  describe("Valid User Id Provided", () => {
+  describe("Valid Item Id Provided", () => {
     test("Should respond with a status code of 200", async () => {
       const response = await request(app).get(
         "/api/item/608c2782e6213b23d40219aa"
@@ -109,7 +108,7 @@ describe("GET - /item/:itemId", () => {
     });
   });
 
-  describe("Invalid Valid User Id Provided", () => {
+  describe("Invalid Valid Item Id Provided", () => {
     test("Should respond with a status code of 500", async () => {
       const response = await request(app).get("/api/item/123");
       expect(response.statusCode).toBe(500);

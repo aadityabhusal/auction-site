@@ -6,7 +6,6 @@ beforeAll(async () => {
   await mongoose.connect("mongodb://localhost/AuctionSite_Test", {
     useNewUrlParser: true,
     useUnifiedTopology: true,
-    useCreateIndex: true,
   });
 });
 

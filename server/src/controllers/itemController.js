@@ -1,6 +1,7 @@
 const Item = require("../models/itemModel");
 const User = require("../models/userModel");
 const mongoose = require("mongoose");
+const fs = require("fs");
 
 const createItem = async (req, res, next) => {
   try {
@@ -45,18 +46,33 @@ const updateItem = async (req, res, next) => {
   try {
     if (req.file) {
       req.body.image = req.file.filename;
-      /* Delete the older image file */
+      let item = await Item.findOne({ _id: req.params.itemId }, { image: 1 });
+      fs.unlink(__dirname + "/../../uploads/" + item.image, (err) => {});
     }
     if (req.body.seller) {
       req.body.seller = JSON.parse(req.body.seller);
     }
 
-    await Item.findOneAndUpdate({ _id: req.params.itemId }, req.body, {
-      new: true,
-      useFindAndModify: false,
-    });
+    let updated = await (
+      await Item.findOneAndUpdate({ _id: req.params.itemId }, req.body, {
+        new: true,
+        useFindAndModify: false,
+      })
+    ).toJSON();
+
+    await User.updateOne(
+      { "items._id": updated._id },
+      {
+        $set: {
+          "items.$.title": updated.title,
+          "items.$.image": updated.image,
+        },
+      }
+    );
+
     res.send({ message: "Item Updated" });
   } catch (error) {
+    console.log(error);
     error.status = 400;
     return next(error);
   }
@@ -64,8 +80,9 @@ const updateItem = async (req, res, next) => {
 
 const deleteItem = async (req, res, next) => {
   try {
+    let item = await Item.findOne({ _id: req.params.itemId }, { image: 1 });
+    fs.unlink(__dirname + "/../../uploads/" + item.image, (err) => {});
     await Item.deleteOne({ _id: req.params.itemId });
-
     await User.findOneAndUpdate(
       { _id: req.body.sellerId },
       {
@@ -83,7 +100,6 @@ const deleteItem = async (req, res, next) => {
 
     res.send({ message: "Item Deleted" });
   } catch (error) {
-    console.log(error);
     error.status = 500;
     return next(error);
   }
