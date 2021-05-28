@@ -229,6 +229,6 @@ export function ItemPage() {
       </BiddingContainer>
     </PageContainer>
   ) : (
-    <NoResults>Loading...</NoResults>
+    <NoResults>No items to show</NoResults>
   );
 }

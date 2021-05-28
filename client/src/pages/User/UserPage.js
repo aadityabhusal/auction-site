@@ -31,7 +31,7 @@ export function UserPage() {
 
   useEffect(() => {
     getUser(userId);
-  }, [userId]);
+  }, [userId, authUser]);
 
   const getUser = async (userId) => {
     try {
@@ -43,7 +43,11 @@ export function UserPage() {
       });
       let data = await response.json();
       setUser(data);
-      setItems(data.items);
+      if (authUser?._id === data._id) {
+        setItems(data.items);
+      } else {
+        setItems(data.items.filter((item) => item.status === 1));
+      }
     } catch (error) {
       console.log(error);
     }

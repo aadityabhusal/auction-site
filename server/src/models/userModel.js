@@ -40,6 +40,10 @@ const UserSchema = new mongoose.Schema({
           type: String,
           required: "Enter item image",
         },
+        status: {
+          type: Number,
+          default: 0,
+        },
       },
     ],
     default: [],

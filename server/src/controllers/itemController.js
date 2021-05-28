@@ -34,7 +34,7 @@ const createItem = async (req, res, next) => {
 
 const getItem = async (req, res, next) => {
   try {
-    let item = await Item.findById(req.params.itemId);
+    let item = await Item.findOne({ _id: req.params.itemId, status: 1 });
     res.send(item);
   } catch (error) {
     error.status = 500;
@@ -66,6 +66,7 @@ const updateItem = async (req, res, next) => {
         $set: {
           "items.$.title": updated.title,
           "items.$.image": updated.image,
+          "items.$.status": updated.status,
         },
       }
     );
@@ -124,12 +125,12 @@ const placeBid = async (req, res, next) => {
 
 const searchItem = async (req, res, next) => {
   let regex = new RegExp(req.params.value, "i");
-  let items = await Item.find({ title: regex });
+  let items = await Item.find({ title: regex, status: 1 });
   res.send(items);
 };
 
 const getHomePageItems = async (req, res, next) => {
-  let item = await Item.find({}).sort({ auctionDate: -1 }).limit(20);
+  let item = await Item.find({ status: 1 }).sort({ auctionDate: -1 }).limit(20);
   res.send(item);
 };
 
