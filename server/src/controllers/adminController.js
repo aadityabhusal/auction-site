@@ -62,6 +62,9 @@ const authenticateAdmin = async (req, res, next) => {
 
 const updateAdmin = async (req, res, next) => {
   try {
+    if (req.body.password) {
+      req.body.password = Hex.stringify(sha256(req.body.password));
+    }
     let { password, ...data } = await (
       await Admin.findOneAndUpdate({ _id: req.params.adminId }, req.body, {
         new: true,

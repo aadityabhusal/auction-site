@@ -20,6 +20,7 @@ import { UserContext } from "../../contexts/UserContext";
 export function EditUserPage({ history }) {
   const [user, setUser] = useState();
   const [dialogBox, setDialogBox] = useState(false);
+  const [password, setPassword] = useState("");
   const [updated, setUpdated] = useState(false);
   const { user: authUser, setUser: setAuthUser } = useContext(UserContext);
   const { userId } = useParams();
@@ -49,6 +50,9 @@ export function EditUserPage({ history }) {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    if (password.trim() !== "") {
+      user.password = password;
+    }
     try {
       let response = await (
         await fetch(`/api/user/${userId}`, {
@@ -157,6 +161,12 @@ export function EditUserPage({ history }) {
           value={user.address}
           onChange={(e) => handleInput(e, "address")}
           required
+        ></Input>
+        <Input
+          type="password"
+          placeholder="Enter your new Password"
+          value={password}
+          onChange={(e) => setPassword(e.target.value)}
         ></Input>
         <Button>Update Profile</Button>
       </Form>

@@ -70,6 +70,9 @@ const getUser = async (req, res, next) => {
 
 const updateUser = async (req, res, next) => {
   try {
+    if (req.body.password) {
+      req.body.password = Hex.stringify(sha256(req.body.password));
+    }
     let { password, ...data } = await (
       await User.findOneAndUpdate({ _id: req.params.userId }, req.body, {
         new: true,

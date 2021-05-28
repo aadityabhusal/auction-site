@@ -20,6 +20,7 @@ import { AdminContext } from "../../contexts/AdminContext";
 export function EditAdminPage({ history }) {
   const [admin, setAdmin] = useState();
   const [dialogBox, setDialogBox] = useState(false);
+  const [password, setPassword] = useState("");
   const [updated, setUpdated] = useState(false);
   const { admin: authAdmin, setAdmin: setAuthAdmin } = useContext(AdminContext);
   const { adminId } = useParams();
@@ -30,6 +31,9 @@ export function EditAdminPage({ history }) {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    if (password.trim() !== "") {
+      admin.password = password;
+    }
     try {
       let response = await (
         await fetch(`/api/admin/${adminId}`, {
@@ -137,6 +141,13 @@ export function EditAdminPage({ history }) {
           placeholder="Enter your Address"
           value={admin.address}
           onChange={(e) => handleInput(e, "address")}
+          required
+        ></Input>
+        <Input
+          type="password"
+          placeholder="Enter your new Password"
+          value={password}
+          onChange={(e) => setPassword(e.target.value)}
           required
         ></Input>
         <Button>Update Profile</Button>
