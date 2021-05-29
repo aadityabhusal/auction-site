@@ -129,6 +129,29 @@ const searchItem = async (req, res, next) => {
   res.send(items);
 };
 
+const advancedSearch = async (req, res, next) => {
+  req.body.title = new RegExp(req.body.search, "i");
+  delete req.body.search;
+  if (req.body.price) {
+    req.body.bidAmount = {
+      $gt: Number(req.body.price[0]),
+      $lt: Number(req.body.price[1]),
+    };
+    delete req.body.price;
+  }
+  if (req.body.auctionDate) {
+    let date = new Date(req.body.auctionDate);
+    let date2 = new Date(req.body.auctionDate);
+    date2.setDate(date2.getDate() + 1);
+    req.body.auctionDate = {
+      $gte: date,
+      $lt: date2,
+    };
+  }
+  let items = await Item.find({ ...req.body, status: 1 });
+  res.send(items);
+};
+
 const getHomePageItems = async (req, res, next) => {
   let item = await Item.find({ status: 1 }).sort({ auctionDate: -1 }).limit(20);
   res.send(item);
@@ -141,5 +164,6 @@ module.exports = {
   deleteItem,
   placeBid,
   searchItem,
+  advancedSearch,
   getHomePageItems,
 };

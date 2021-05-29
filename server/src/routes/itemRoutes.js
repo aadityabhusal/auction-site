@@ -8,6 +8,7 @@ const {
   createItem,
   placeBid,
   searchItem,
+  advancedSearch,
   getHomePageItems,
 } = require("../controllers/itemController");
 
@@ -35,6 +36,7 @@ const routes = () => {
   router.post("/", upload.single("image"), createItem);
   router.put("/:itemId/placeBid", placeBid);
   router.get("/search/:value", searchItem);
+  router.post("/advanced", advancedSearch);
   router.get("/homepage", getHomePageItems);
 
   router

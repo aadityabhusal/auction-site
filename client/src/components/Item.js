@@ -65,9 +65,3 @@ export const ItemInfoTitle = styled.div`
 `;
 
 export const ItemInfoValue = styled.div``;
-
-export const SearchBox = styled.div`
-  display: flex;
-  flex: 1;
-  margin-bottom: 30px;
-`;
