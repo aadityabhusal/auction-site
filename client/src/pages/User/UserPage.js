@@ -28,9 +28,12 @@ export function UserPage() {
   const { user: authUser } = useContext(UserContext);
   const { userId } = useParams();
   const [items, setItems] = useState([]);
+  const [selectedItems, setSelectedItems] = useState([]);
+  const [wonItems, setWonItems] = useState([]);
 
   useEffect(() => {
     getUser(userId);
+    getWonItems();
   }, [userId, authUser]);
 
   const getUser = async (userId) => {
@@ -45,13 +48,31 @@ export function UserPage() {
       setUser(data);
       if (authUser?._id === data._id) {
         setItems(data.items);
+        setSelectedItems(data.items);
       } else {
-        setItems(data.items.filter((item) => item.status === 1));
+        let list = data.items.filter((item) => item.status === 1);
+        setItems(list);
+        setSelectedItems(list);
       }
     } catch (error) {
       console.log(error);
     }
   };
+
+  async function getWonItems() {
+    try {
+      let response = await fetch(`/api/user/${userId}/wonitems`, {
+        headers: {
+          "Content-Type": "application/json",
+        },
+        credentials: "include",
+      });
+      let data = await response.json();
+      setWonItems(data);
+    } catch (error) {
+      console.log(error);
+    }
+  }
 
   return user ? (
     <PageContainer>
@@ -74,16 +95,16 @@ export function UserPage() {
       </UserHeadSection>
       <UserItemsSection>
         <UserItemsNav>
-          <ButtonOption onClick={(e) => setItems(user.items)}>
+          <ButtonOption onClick={(e) => setSelectedItems(items)}>
             Selling Items
           </ButtonOption>
-          <ButtonOption onClick={(e) => setItems(authUser.won)}>
+          <ButtonOption onClick={(e) => setSelectedItems(wonItems)}>
             Won Items
           </ButtonOption>
         </UserItemsNav>
         <ItemList>
-          {items.length ? (
-            items.map((item) => (
+          {selectedItems.length ? (
+            selectedItems.map((item) => (
               <ItemCard key={item._id}>
                 <ItemCardImage>
                   <img src={`/uploads/${item.image}`} alt={item.title} />
