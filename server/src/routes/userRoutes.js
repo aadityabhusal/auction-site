@@ -7,6 +7,7 @@ const {
   loginUser,
   authenticateUser,
   getWonItems,
+  getPendingBids,
 } = require("../controllers/userController");
 
 const router = express.Router();
@@ -17,6 +18,7 @@ const routes = () => {
   router.post("/auth", authenticateUser);
   router.route("/:userId").get(getUser).put(updateUser).delete(deleteUser);
   router.get("/:userId/wonitems", getWonItems);
+  router.get("/:userId/pending", getPendingBids);
 
   return router;
 };

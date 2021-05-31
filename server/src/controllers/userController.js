@@ -78,6 +78,21 @@ const getWonItems = async (req, res, next) => {
   }
 };
 
+const getPendingBids = async (req, res, next) => {
+  try {
+    let data = await Item.find({
+      "winner._id": { $ne: req.params.userId },
+      bidders: {
+        $elemMatch: { _id: req.params.userId },
+      },
+    });
+    res.send(data);
+  } catch (error) {
+    error.status = 500;
+    return next(error);
+  }
+};
+
 const updateUser = async (req, res, next) => {
   try {
     if (req.body.password) {
@@ -117,4 +132,5 @@ module.exports = {
   loginUser,
   authenticateUser,
   getWonItems,
+  getPendingBids,
 };

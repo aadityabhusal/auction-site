@@ -30,10 +30,12 @@ export function UserPage() {
   const [items, setItems] = useState([]);
   const [selectedItems, setSelectedItems] = useState([]);
   const [wonItems, setWonItems] = useState([]);
+  const [pendingItems, setPendingItems] = useState([]);
 
   useEffect(() => {
     getUser(userId);
     getWonItems();
+    getPendingItems();
   }, [userId, authUser]);
 
   const getUser = async (userId) => {
@@ -74,6 +76,21 @@ export function UserPage() {
     }
   }
 
+  async function getPendingItems() {
+    try {
+      let response = await fetch(`/api/user/${userId}/pending`, {
+        headers: {
+          "Content-Type": "application/json",
+        },
+        credentials: "include",
+      });
+      let data = await response.json();
+      setPendingItems(data);
+    } catch (error) {
+      console.log(error);
+    }
+  }
+
   return user ? (
     <PageContainer>
       <UserHeadSection>
@@ -100,6 +117,9 @@ export function UserPage() {
           </ButtonOption>
           <ButtonOption onClick={(e) => setSelectedItems(wonItems)}>
             Won Items
+          </ButtonOption>
+          <ButtonOption onClick={(e) => setSelectedItems(pendingItems)}>
+            Pending Items
           </ButtonOption>
         </UserItemsNav>
         <ItemList>
