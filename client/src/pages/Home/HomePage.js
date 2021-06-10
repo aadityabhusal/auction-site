@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { NoResults } from "../../components/Core";
+import { NoResults, PageContainer, Title2 } from "../../components/Core";
 import {
   ItemCard,
   ItemCardImage,
@@ -25,19 +25,24 @@ export function HomePage() {
   }
 
   return (
-    <ItemList>
-      {items.length ? (
-        items.map((item) => (
-          <ItemCard key={item._id}>
-            <ItemCardImage>
-              <img src={`/uploads/${item.image}`} alt={item.title} />
-            </ItemCardImage>
-            <ItemCardTitle to={`/item/${item._id}`}>{item.title}</ItemCardTitle>
-          </ItemCard>
-        ))
-      ) : (
-        <NoResults>No items to show</NoResults>
-      )}
-    </ItemList>
+    <PageContainer>
+      <Title2>Today's Auctions</Title2>
+      <ItemList>
+        {items.length ? (
+          items.map((item) => (
+            <ItemCard key={item._id}>
+              <ItemCardImage>
+                <img src={`/uploads/${item.image}`} alt={item.title} />
+              </ItemCardImage>
+              <ItemCardTitle to={`/item/${item._id}`}>
+                {item.title}
+              </ItemCardTitle>
+            </ItemCard>
+          ))
+        ) : (
+          <NoResults>No items to show</NoResults>
+        )}
+      </ItemList>
+    </PageContainer>
   );
 }

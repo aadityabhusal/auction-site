@@ -17,7 +17,6 @@ export function SignupPage(props) {
   const [password, setPassword] = useState("");
   const [contact, setContact] = useState("");
   const [address, setAddress] = useState("");
-  // const [role, setRole] = useState();
   const [error, setError] = useState([]);
 
   const { user } = useContext(UserContext);
@@ -31,7 +30,6 @@ export function SignupPage(props) {
       password,
       contact,
       address,
-      // role,
     };
     try {
       let response = await (

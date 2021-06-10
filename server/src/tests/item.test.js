@@ -45,50 +45,6 @@ describe("POST - /item", () => {
       expect(response.body.error).toBeDefined();
     });
   });
-
-  /*   describe("All required field provided", () => {
-    test("Should respond with a status code of 200", async () => {
-      const response = await request(app)
-        .post("/api/item")
-        .send({
-          title: "Temp Item",
-          category: "Drawing",
-          bidAmount: 100,
-          description: "This is Temp Item's Description",
-          image: "tempitem.png",
-          contact: "9876543210",
-          address: "Nepal",
-          auctionDate: "2021-04-30T16:04:17.104Z",
-          seller: {
-            _id: "60a0fa544d582721dcc0fc36",
-            firstName: "Test",
-            lastName: "User",
-          },
-        });
-      expect(response.statusCode).toBe(200);
-    });
-
-    test("Should respond with a message", async () => {
-      const response = await request(app)
-        .post("/api/item")
-        .send({
-          title: "Temp Item",
-          category: "Drawing",
-          bidAmount: 100,
-          description: "This is Temp Item's Description",
-          image: "tempitem.png",
-          contact: "9876543210",
-          address: "Nepal",
-          auctionDate: "2021-04-30T16:04:17.104Z",
-          seller: {
-            _id: "60a0fa544d582721dcc0fc36",
-            firstName: "Test",
-            lastName: "User",
-          },
-        });
-      expect(response.body.message).toBeDefined();
-    });
-  }); */
 });
 
 describe("GET - /item/:itemId", () => {
@@ -183,17 +139,6 @@ describe("DELETE - /item/:itemId", () => {
       expect(response.body.error).toBeDefined();
     });
   });
-
-  /*   describe("All required values given", () => {
-    test("Should respond with a status code of 200", async () => {
-      const response = await request(app)
-        .delete("/api/item/60af1dcdc561bc08d86ca6c6")
-        .send({
-          _id: "60af1dcdc561bc08d86ca6c6",
-        });
-      expect(response.statusCode).toBe(200);
-    });
-  }); */
 });
 
 describe("GET - /item/search/:value", () => {
@@ -204,6 +149,32 @@ describe("GET - /item/search/:value", () => {
 
   test("Should respond with an array", async () => {
     const response = await request(app).get("/api/item/search/monalisa");
+    expect(Array.isArray(response.body)).toBe(true);
+  });
+});
+
+describe("POST - /item/advanced", () => {
+  test("Should respond with a status code of 200", async () => {
+    const response = await request(app)
+      .post("/api/item/advanced")
+      .send({
+        title: "Temp",
+        category: 1,
+        price: [50, 200],
+        auctionDate: "2021-04-30T16:04:17.104Z",
+      });
+    expect(response.statusCode).toBe(200);
+  });
+
+  test("Should respond with an array", async () => {
+    const response = await request(app)
+      .post("/api/item/advanced")
+      .send({
+        title: "Temp",
+        category: 1,
+        price: [50, 200],
+        auctionDate: "2021-04-30T16:04:17.104Z",
+      });
     expect(Array.isArray(response.body)).toBe(true);
   });
 });

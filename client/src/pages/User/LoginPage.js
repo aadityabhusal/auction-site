@@ -1,5 +1,6 @@
 import React, { useContext, useState } from "react";
 import { Redirect } from "react-router";
+import { Link } from "react-router-dom";
 import {
   Button,
   Input,
@@ -67,6 +68,7 @@ export function LoginPage(props) {
         ></Input>
         <Button>Login</Button>
       </Form>
+      <Link to="/admin/login">Admin Login</Link>
     </FormBox>
   ) : (
     <Redirect to={`/user/${user._id}`} />

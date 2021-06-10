@@ -8,6 +8,7 @@ import {
   FormBox,
   Select,
   TextArea,
+  Message,
   NoResults,
   DialogOverlay,
   DialogBox,
@@ -30,6 +31,7 @@ export function EditItemPage({ history }) {
   const [dialogBox, setDialogBox] = useState(false);
   const { itemId } = useParams();
   const { user } = useContext(UserContext);
+  const [error, setError] = useState([]);
 
   useEffect(() => {
     getItem(itemId, user, history);
@@ -58,7 +60,7 @@ export function EditItemPage({ history }) {
       if (!response.error) {
         history.push(`/item/${itemId}`);
       } else {
-        throw new Error(response.error);
+        setError(Object.values(response.error.errors));
       }
     } catch (error) {
       console.log(error.message);
@@ -139,6 +141,11 @@ export function EditItemPage({ history }) {
           </DialogBox>
         </DialogOverlay>
       )}
+      {error.map((item) => (
+        <Message color="#c0392b" key={item.message}>
+          {item.message}
+        </Message>
+      ))}
       <Title center>Edit Item Information</Title>
       <Form onSubmit={handleSubmit} method="POST" enctype="multipart/form-data">
         <Input
@@ -146,7 +153,6 @@ export function EditItemPage({ history }) {
           placeholder="Enter the Item Title"
           value={item.title}
           onChange={(e) => handleInput(e.target.value, "title")}
-          required
         ></Input>
         <Select
           defaultValue={item.category}
@@ -164,27 +170,23 @@ export function EditItemPage({ history }) {
           placeholder="Enter the Bid Amount"
           value={item.bidAmount}
           onChange={(e) => handleInput(e.target.value, "bidAmount")}
-          required
         ></Input>
         <Input
           type="number"
           placeholder="Enter your Contact Number"
           value={item.contact}
           onChange={(e) => handleInput(e.target.value, "contact")}
-          required
         ></Input>
         <Input
           type="text"
           placeholder="Enter the Address"
           value={item.address}
           onChange={(e) => handleInput(e.target.value, "address")}
-          required
         ></Input>
         <Input
           type="datetime-local"
           value={new Date(item.auctionDate).toISOString().slice(0, -1)}
           onChange={(e) => handleInput(e.target.value, "auctionDate")}
-          required
         ></Input>
         <Input
           type="file"
@@ -195,7 +197,6 @@ export function EditItemPage({ history }) {
           rows={5}
           value={item.description}
           onChange={(e) => handleInput(e.target.value, "description")}
-          required
         ></TextArea>
         <Button>Edit Item</Button>
       </Form>

@@ -22,6 +22,7 @@ export function EditUserPage({ history }) {
   const [dialogBox, setDialogBox] = useState(false);
   const [password, setPassword] = useState("");
   const [updated, setUpdated] = useState(false);
+  const [error, setError] = useState([]);
   const { user: authUser, setUser: setAuthUser } = useContext(UserContext);
   const { userId } = useParams();
 
@@ -68,7 +69,7 @@ export function EditUserPage({ history }) {
         setAuthUser(response);
         setUpdated(true);
       } else {
-        throw new Error(response.error);
+        setError(Object.values(response.error.errors));
       }
     } catch (error) {
       console.log(error.message);
@@ -124,6 +125,11 @@ export function EditUserPage({ history }) {
           </DialogBox>
         </DialogOverlay>
       )}
+      {error.map((item) => (
+        <Message color="#c0392b" key={item.message}>
+          {item.message}
+        </Message>
+      ))}
       {updated && <Message>Your profile was updated!</Message>}
       <Title center>Update your profile</Title>
       <Form onSubmit={handleSubmit} method="POST">
@@ -132,35 +138,30 @@ export function EditUserPage({ history }) {
           placeholder="Enter your First Name"
           value={user.firstName}
           onChange={(e) => handleInput(e, "firstName")}
-          required
         ></Input>
         <Input
           type="text"
           placeholder="Enter your Last Name"
           value={user.lastName}
           onChange={(e) => handleInput(e, "lastName")}
-          required
         ></Input>
         <Input
           type="email"
           placeholder="Enter your email"
           value={user.email}
           onChange={(e) => handleInput(e, "email")}
-          required
         ></Input>
         <Input
           type="number"
           placeholder="Enter your Contact Number"
           value={user.contact}
           onChange={(e) => handleInput(e, "contact")}
-          required
         ></Input>
         <Input
           type="text"
           placeholder="Enter your Address"
           value={user.address}
           onChange={(e) => handleInput(e, "address")}
-          required
         ></Input>
         <Input
           type="password"

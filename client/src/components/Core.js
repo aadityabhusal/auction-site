@@ -58,6 +58,17 @@ export const FormBox = styled.div`
   border-radius: 5px;
   padding: 20px;
   box-shadow: 0 5px 20px 0 #444;
+
+  & a {
+    text-decoration: none;
+    text-align: center;
+    margin-top: 10px;
+    color: #3f51b5;
+
+    &:hover {
+      text-decoration: underline;
+    }
+  }
 `;
 
 export const Form = styled.form`

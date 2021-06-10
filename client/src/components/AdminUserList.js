@@ -2,8 +2,7 @@ import { DataListHead, DataListItem, DataListRow } from "./Admin";
 import { Input } from "./Core";
 
 let userListHead = [
-  ["First Name", 0],
-  ["Last Name", 0],
+  ["Full Name", 0],
   ["Email", 0],
   ["Contact", 0],
   ["Address", 0],

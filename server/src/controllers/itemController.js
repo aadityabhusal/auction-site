@@ -73,7 +73,6 @@ const updateItem = async (req, res, next) => {
 
     res.send({ message: "Item Updated" });
   } catch (error) {
-    console.log(error);
     error.status = 400;
     return next(error);
   }
@@ -153,7 +152,16 @@ const advancedSearch = async (req, res, next) => {
 };
 
 const getHomePageItems = async (req, res, next) => {
-  let item = await Item.find({ status: 1 }).sort({ auctionDate: -1 }).limit(20);
+  let date = new Date();
+  let date2 = new Date();
+  date2.setDate(date2.getDate() + 1);
+  let auctionDate = {
+    $gte: date,
+    $lt: date2,
+  };
+  let item = await Item.find({ status: 1, auctionDate })
+    .sort({ auctionDate: -1 })
+    .limit(20);
   res.send(item);
 };
 
