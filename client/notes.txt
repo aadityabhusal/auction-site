@@ -1,9 +1,0 @@
-Problems/Confusions
-
-Deleting/Editing Admins by Super Admin
-Multiple bids on an item by a user
-
-
-Remaining
-Display Form Error Messages
-Display Conformation Model while deleting
