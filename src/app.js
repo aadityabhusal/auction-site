@@ -1,14 +1,24 @@
 const express = require("express");
 const path = require("path");
 const cookieParser = require("cookie-parser");
+const helmet = require("helmet");
+const morgan = require("morgan");
+const cors = require("cors");
 const createError = require("http-errors");
 
 const app = express();
 const routes = require("./routes");
 
+app.use(helmet());
+app.use(
+  cors({
+    credentials: true,
+  })
+);
 app.use(cookieParser());
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
+app.use(morgan("dev"));
 app.use("/uploads", express.static(path.join(__dirname, "../uploads")));
 app.use("/api/", routes());
 
