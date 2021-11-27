@@ -44,9 +44,7 @@ export function EditUserPage({ history }) {
       } else {
         setUser(authUser);
       }
-    } catch (error) {
-      console.log(error);
-    }
+    } catch (error) {}
   }
 
   const handleSubmit = async (e) => {
@@ -71,9 +69,7 @@ export function EditUserPage({ history }) {
       } else {
         setError(Object.values(response.error.errors));
       }
-    } catch (error) {
-      console.log(error.message);
-    }
+    } catch (error) {}
   };
 
   const handleInput = (e, field) => {
@@ -96,9 +92,7 @@ export function EditUserPage({ history }) {
       } else {
         throw new Error(response.error);
       }
-    } catch (error) {
-      console.log(error.message);
-    }
+    } catch (error) {}
   }
 
   return user ? (

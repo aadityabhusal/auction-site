@@ -47,9 +47,7 @@ export function CreateAdminPage(props) {
       } else {
         setError(Object.values(response.error.errors));
       }
-    } catch (error) {
-      console.log(error.message);
-    }
+    } catch (error) {}
   };
 
   return admin?.role === 1 ? (

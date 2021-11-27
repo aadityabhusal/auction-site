@@ -62,9 +62,7 @@ export function EditItemPage({ history }) {
       } else {
         setError(Object.values(response.error.errors));
       }
-    } catch (error) {
-      console.log(error.message);
-    }
+    } catch (error) {}
   };
 
   async function getItem(itemId, user, history) {
@@ -81,15 +79,12 @@ export function EditItemPage({ history }) {
       } else {
         setItem(data);
       }
-    } catch (error) {
-      console.log(error);
-    }
+    } catch (error) {}
   }
 
   const handleInput = (value, field) => {
     if (field === "auctionDate") {
       value = value || new Date().toISOString().slice(0, -5);
-      console.log(value);
     }
     setItem((prev) => ({ ...prev, [field]: value }));
   };
@@ -114,9 +109,7 @@ export function EditItemPage({ history }) {
       } else {
         throw new Error(response.error);
       }
-    } catch (error) {
-      console.log(error.message);
-    }
+    } catch (error) {}
   }
 
   return item ? (

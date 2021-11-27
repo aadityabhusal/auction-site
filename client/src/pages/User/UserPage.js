@@ -56,9 +56,7 @@ export function UserPage() {
         setItems(list);
         setSelectedItems(list);
       }
-    } catch (error) {
-      console.log(error);
-    }
+    } catch (error) {}
   };
 
   async function getWonItems() {
@@ -71,9 +69,7 @@ export function UserPage() {
       });
       let data = await response.json();
       setWonItems(data);
-    } catch (error) {
-      console.log(error);
-    }
+    } catch (error) {}
   }
 
   async function getPendingItems() {
@@ -86,9 +82,7 @@ export function UserPage() {
       });
       let data = await response.json();
       setPendingItems(data);
-    } catch (error) {
-      console.log(error);
-    }
+    } catch (error) {}
   }
 
   return user ? (

@@ -44,9 +44,7 @@ export function SearchItemPage() {
         let response = await fetch(`/api/item/search/${search}`);
         let data = await response.json();
         setResults(data);
-      } catch (error) {
-        console.log(error.message);
-      }
+      } catch (error) {}
     }
   };
 
@@ -77,11 +75,8 @@ export function SearchItemPage() {
           body: JSON.stringify(data),
         })
       ).json();
-      console.log(response);
       setResults(response);
-    } catch (error) {
-      console.log(error.message);
-    }
+    } catch (error) {}
   };
 
   const handlePrice = (e, val) => {

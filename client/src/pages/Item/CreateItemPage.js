@@ -63,9 +63,7 @@ export function CreateItemPage({ history }) {
       } else {
         setError(Object.values(response.error.errors));
       }
-    } catch (error) {
-      console.log(error.message);
-    }
+    } catch (error) {}
   };
 
   return (

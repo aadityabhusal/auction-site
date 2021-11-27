@@ -53,7 +53,5 @@ async function handleApproval(e, data, type) {
       },
       body: JSON.stringify({ status: value }),
     });
-  } catch (error) {
-    console.log(error.message);
-  }
+  } catch (error) {}
 }

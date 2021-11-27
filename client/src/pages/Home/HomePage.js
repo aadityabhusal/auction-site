@@ -19,9 +19,7 @@ export function HomePage() {
       let response = await fetch(`/api/item/homepage`);
       let data = await response.json();
       setItems(data);
-    } catch (error) {
-      console.log(error.message);
-    }
+    } catch (error) {}
   }
 
   return (

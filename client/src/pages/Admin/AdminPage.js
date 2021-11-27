@@ -53,9 +53,7 @@ export function AdminPage() {
         setListType("user");
         setList(users);
       }
-    } catch (error) {
-      console.log(error);
-    }
+    } catch (error) {}
   }
 
   async function getItems() {
@@ -75,9 +73,7 @@ export function AdminPage() {
         setList(items);
         setListType("item");
       }
-    } catch (error) {
-      console.log(error);
-    }
+    } catch (error) {}
   }
 
   async function getAdmins() {
@@ -97,9 +93,7 @@ export function AdminPage() {
         setListType("admin");
         setList(admins);
       }
-    } catch (error) {
-      console.log(error);
-    }
+    } catch (error) {}
   }
 
   async function getAuctionWinners() {

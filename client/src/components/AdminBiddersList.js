@@ -77,7 +77,7 @@ async function handleApproval(e, item) {
     item: itemData,
     approved: value,
   };
-  console.log(data);
+
   try {
     await fetch(`/api/admin/approveWinner`, {
       method: "put",
@@ -87,7 +87,5 @@ async function handleApproval(e, item) {
       },
       body: JSON.stringify(data),
     });
-  } catch (error) {
-    console.log(error.message);
-  }
+  } catch (error) {}
 }

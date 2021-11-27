@@ -22,9 +22,7 @@ export const AdminProvider = (props) => {
         if (!admin.error) {
           setAdmin(admin);
         }
-      } catch (error) {
-        console.log(error);
-      }
+      } catch (error) {}
     })();
   }, [token]);
 

@@ -65,9 +65,7 @@ export function ItemPage() {
       });
       let data = await response.json();
       setItem(data);
-    } catch (error) {
-      console.log(error);
-    }
+    } catch (error) {}
   }
 
   function formatDate(dateString) {

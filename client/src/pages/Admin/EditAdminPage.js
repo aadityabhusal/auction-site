@@ -52,9 +52,7 @@ export function EditAdminPage({ history }) {
       } else {
         setError(Object.values(response.error.errors));
       }
-    } catch (error) {
-      console.log(error.message);
-    }
+    } catch (error) {}
   };
 
   const handleInput = (e, field) => {
@@ -77,9 +75,7 @@ export function EditAdminPage({ history }) {
       } else {
         throw new Error(response.error);
       }
-    } catch (error) {
-      console.log(error.message);
-    }
+    } catch (error) {}
   }
 
   return admin ? (

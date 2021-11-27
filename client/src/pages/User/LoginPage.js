@@ -44,9 +44,7 @@ export function LoginPage(props) {
       } else {
         setError(response.error);
       }
-    } catch (error) {
-      console.log(error.message);
-    }
+    } catch (error) {}
   };
 
   return !user ? (

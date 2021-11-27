@@ -43,9 +43,7 @@ export function AdminLoginPage(props) {
       } else {
         setError(response.error);
       }
-    } catch (error) {
-      console.log(error.message);
-    }
+    } catch (error) {}
   };
 
   return !admin ? (
