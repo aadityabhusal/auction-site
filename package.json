@@ -1,11 +1,12 @@
 {
   "name": "auction-site-server",
   "version": "1.0.0",
-  "description": "",
+  "description": "An auction site including functionalities for administrator, staff, sellers and buyers.",
   "main": "src/server.js",
   "scripts": {
-    "start": "nodemon src/server.js",
-    "test": "jest --coverage"
+    "start": "node src/server.js",
+    "test": "jest --coverage",
+    "heroku-postbuild": "npm install --prefix client && cross-env NPM_CONFIG_PRODUCTION=false SKIP_PREFLIGHT_CHECK=true INLINE_RUNTIME_CHUNK=false npm run build --prefix client"
   },
   "author": "Aaditya Bhusal",
   "license": "ISC",
